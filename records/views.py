@@ -1,3 +1,4 @@
+import os
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
@@ -36,3 +37,19 @@ def upload_scan(request):
 def medical_record_file(request, record_id):
 	medical_record = get_object_or_404(MedicalRecord, id=record_id, patient=request.user)
 	return FileResponse(medical_record.uploaded_file.open("rb"), as_attachment=False)
+
+@patient_required
+def patient_view_report(request, record_id):
+	medical_record = get_object_or_404(MedicalRecord, id=record_id, patient=request.user)
+	
+	file_extension = os.path.splitext(medical_record.uploaded_file.name)[1].lower()
+	is_image_file = file_extension in {".jpg", ".jpeg", ".png", ".gif", ".webp"}
+	is_pdf_file = file_extension == ".pdf"
+	
+	context = {
+		"record": medical_record,
+		"is_image_file": is_image_file,
+		"is_pdf_file": is_pdf_file,
+		"file_extension": file_extension,
+	}
+	return render(request, "records/patient_view_report.html", context)

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Diagnostic Report - {{ record.scan_id }}</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: { primary: "#0df280" },
+                fontFamily: { display: ["Inter", "sans-serif"] }
+            }
+        }
+    }
+</script>
+<style>
+    body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+    .print-only { display: none; }
+    @media print {
+        body { background-color: white; }
+        .no-print { display: none !important; }
+        .print-only { display: flex !important; }
+    }
+</style>
+</head>
+<body class="text-slate-900 font-display p-6 sm:p-12">
+
+<div class="max-w-5xl mx-auto bg-white rounded-2xl shadow border border-slate-200 overflow-hidden">
+    <!-- Header -->
+    <header class="bg-slate-900 text-white p-8 no-print">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center text-slate-900">
+                    <span class="material-symbols-outlined text-3xl font-bold">clinical_notes</span>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-tight">CuraMind Diagnostics</h1>
+                    <p class="text-slate-400 text-sm font-medium tracking-widest uppercase">Official AI-Assisted Medical Report</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="{% url 'patient_medical_records' %}" class="flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition font-medium text-sm">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span> Back
+                </a>
+                <button onclick="window.print()" class="flex items-center gap-2 px-4 py-2 bg-primary text-slate-900 font-bold rounded-lg hover:brightness-110 transition shadow-lg shadow-primary/20 text-sm">
+                    <span class="material-symbols-outlined text-sm">print</span> Print Report
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <div class="p-8">
+        <!-- Patient Info -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8 pb-8 border-b border-slate-200 text-sm">
+            <div>
+                <p class="text-slate-500 font-bold uppercase tracking-wider text-[10px] mb-1">Patient Name</p>
+                <p class="font-bold text-slate-900">{{ record.patient.get_full_name|default:record.patient.username }}</p>
+            </div>
+            <div>
+                <p class="text-slate-500 font-bold uppercase tracking-wider text-[10px] mb-1">Scan ID / Type</p>
+                <p class="font-bold text-slate-900">{{ record.scan_id }} • {{ record.scan_type }}</p>
+            </div>
+            <div>
+                <p class="text-slate-500 font-bold uppercase tracking-wider text-[10px] mb-1">Upload Date</p>
+                <p class="font-bold text-slate-900">{{ record.created_at|date:"M d, Y" }}</p>
+            </div>
+            <div>
+                <p class="text-slate-500 font-bold uppercase tracking-wider text-[10px] mb-1">Reviewing Doctor</p>
+                <p class="font-bold text-slate-900">
+                    {% if record.reviewed_by %}
+                        Dr. {{ record.reviewed_by.get_full_name|default:record.reviewed_by.username }}
+                    {% else %}
+                        Pending Review
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <!-- Scan Viewer -->
+            <div class="flex flex-col gap-4 lg:sticky lg:top-8">
+                <h2 class="text-lg font-bold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary shadow-sm drop-shadow">image</span> Diagnostic Scan
+                </h2>
+                <div class="flex-1 min-h-[400px] bg-slate-950 rounded-xl overflow-hidden flex items-center justify-center p-4">
+                    {% if is_image_file %}
+                        <img src="{{ record.uploaded_file.url }}" class="max-w-full max-h-full object-contain rounded" alt="Medical Scan">
+                    {% elif is_pdf_file %}
+                        <iframe src="{{ record.uploaded_file.url }}" class="w-full h-full min-h-[500px] bg-white rounded" title="PDF Document"></iframe>
+                    {% else %}
+                        <div class="text-center text-white">
+                            <span class="material-symbols-outlined text-4xl text-primary">folder_open</span>
+                            <p class="mt-2 text-sm">Preview not available.</p>
+                            <a href="{% url 'medical_record_file' record.id %}" target="_blank" class="mt-4 inline-block text-primary hover:underline">Download File</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Doctor Notes -->
+            <div class="flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-bold flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary shadow-sm drop-shadow">clinical_notes</span> Clinical Findings
+                    </h2>
+                    {% if record.review_status == 'completed' %}
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full flex items-center gap-1 border border-emerald-200">
+                            <span class="material-symbols-outlined text-sm">verified</span> Finalized
+                        </span>
+                    {% else %}
+                        <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full flex items-center gap-1 border border-amber-200">
+                            <span class="material-symbols-outlined text-sm">pending</span> Draft
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 min-h-[400px]">
+                    {% if record.doctor_notes %}
+                        <div class="prose prose-sm prose-slate max-w-none [&_b]:font-black [&_strong]:font-black [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:my-2 [&_li]:mb-1 leading-relaxed">
+                            {{ record.doctor_notes|safe }}
+                        </div>
+                    {% else %}
+                        <div class="h-full flex flex-col items-center justify-center text-slate-400 text-center py-12">
+                            <span class="material-symbols-outlined text-4xl mb-3 opacity-50">hourglass_empty</span>
+                            <p class="font-medium">Findings have not been entered yet.</p>
+                            <p class="text-xs mt-1">Check back later once the reviewing doctor has finalized this scan.</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                {% if record.ai_confidence_score %}
+                <div class="mt-auto pt-4 flex flex-col items-end">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">AI Anomaly Confidence</p>
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl font-black text-primary">{{ record.ai_confidence_score }}%</span>
+                        <div class="w-32 h-2.5 bg-slate-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-primary" style="width: {{ record.ai_confidence_score }}%"></div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="mt-12 pt-8 border-t border-slate-200 flex flex-col items-center justify-center gap-2 text-slate-400 print-only">
+            <span class="material-symbols-outlined text-3xl opacity-50">health_and_safety</span>
+            <p class="text-[10px] uppercase tracking-widest font-bold">Report generated securely via CuraMind AI</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -29,6 +29,7 @@ class MedicalRecord(models.Model):
 	scan_id = models.CharField(max_length=20, unique=True, editable=False)
 	doctor_notes = models.TextField(blank=True, default="")
 	ai_status = models.CharField(max_length=20, choices=AIStatus.choices, default=AIStatus.UPLOADED)
+	ai_confidence_score = models.IntegerField(null=True, blank=True, help_text="Real AI generated score (0-100)")
 	review_status = models.CharField(max_length=20, choices=ReviewStatus.choices, default=ReviewStatus.READY)
 	reviewed_by = models.ForeignKey(
 		settings.AUTH_USER_MODEL,

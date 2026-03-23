@@ -27,6 +27,8 @@ def _doctor_pending_appointments_count(doctor_user):
 
 
 def _ai_confidence_score(record):
+	if getattr(record, "ai_confidence_score", None) is not None:
+		return record.ai_confidence_score
 	if record.ai_status == MedicalRecord.AIStatus.HIGH:
 		return 97
 	if record.ai_status == MedicalRecord.AIStatus.MEDIUM:
@@ -171,6 +173,39 @@ def start_review(request, record_id):
 				ip_address=request.META.get("REMOTE_ADDR"),
 			)
 			messages.success(request, "Peer review request has been logged.")
+			return redirect("doctor_start_review", record_id=medical_record.id)
+
+		if action == "analyze_ai":
+			from .medical_ai import analyze_medical_image
+			try:
+				result_data = analyze_medical_image(medical_record.uploaded_file.path)
+				if "error" in result_data:
+					messages.error(request, result_data["error"])
+				else:
+					score = result_data.get("score", 0)
+					result_html = result_data.get("analysis", "")
+					
+					if score >= 80:
+						medical_record.ai_status = MedicalRecord.AIStatus.HIGH
+					elif score >= 40:
+						medical_record.ai_status = MedicalRecord.AIStatus.MEDIUM
+					else:
+						medical_record.ai_status = MedicalRecord.AIStatus.LOW
+					
+					medical_record.ai_confidence_score = score
+					medical_record.doctor_notes = f"{notes}<br><br><b>--- AI Analysis (Score: {score}%) ---</b><br><br>{result_html}" if notes else result_html
+					medical_record.save(update_fields=["doctor_notes", "ai_status", "ai_confidence_score"])
+					messages.success(request, f"AI analysis completed. Anomaly Score: {score}%")
+					
+				AuditLog.objects.create(
+					user=request.user,
+					action="AI_ANALYSIS",
+					object_type="MedicalRecord",
+					object_id=str(medical_record.id),
+					ip_address=request.META.get("REMOTE_ADDR"),
+				)
+			except Exception as e:
+				messages.error(request, f"Failed to analyze image with AI: {e}")
 			return redirect("doctor_start_review", record_id=medical_record.id)
 
 	patient_profile = getattr(medical_record.patient, "patient_profile", None)

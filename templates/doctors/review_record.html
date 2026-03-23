@@ -6,6 +6,12 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
+<script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
+<style>
+/* Disable trix default attachment button if needed, but we keep it default for now */
+trix-toolbar [data-trix-button-group="file-tools"] { display: none; }
+</style>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -261,18 +267,22 @@
 <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Doctor's Diagnostic Notes</h3>
 <form method="post" id="review-form">
 {% csrf_token %}
-<textarea name="doctor_notes" class="w-full h-40 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl text-sm p-4 focus:ring-primary focus:border-primary placeholder:text-slate-400" placeholder="Type your findings, measurements, or corrections here...">{{ record.doctor_notes }}</textarea>
+<input id="notes_input" type="hidden" name="doctor_notes" value="{{ record.doctor_notes }}">
+<trix-editor input="notes_input" class="w-full min-h-[300px] overflow-y-auto bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl text-sm p-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary placeholder:text-slate-400 [&_b]:font-bold [&_strong]:font-bold [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:my-2 [&_li]:mb-1" placeholder="Type your findings, measurements, or corrections here..."></trix-editor>
 </form>
 </div>
 </div>
 
 <div class="p-6 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
-<div class="grid grid-cols-2 gap-3 mb-3">
+<div class="grid grid-cols-3 gap-3 mb-3">
 <button form="review-form" type="submit" name="action" value="save_notes" class="flex items-center justify-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
 <span class="material-symbols-outlined text-sm">edit_square</span> Save Notes
 </button>
 <button form="review-form" type="submit" name="action" value="request_peer_review" class="flex items-center justify-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
-<span class="material-symbols-outlined text-sm">assignment_return</span> Request Peer Review
+<span class="material-symbols-outlined text-sm">assignment_return</span> Peer Review
+</button>
+<button form="review-form" type="submit" name="action" value="analyze_ai" onclick="this.innerHTML='<span class=\'material-symbols-outlined text-sm animate-spin\'>refresh</span> Analyzing...'; this.classList.add('opacity-70', 'cursor-wait');" class="flex items-center justify-center gap-2 px-4 py-2 bg-primary/20 dark:bg-primary/20 border border-primary text-slate-900 dark:text-primary rounded-lg text-xs font-bold hover:bg-primary/30 transition-colors">
+<span class="material-symbols-outlined text-sm">neurology</span> Analyze AI
 </button>
 </div>
 <button form="review-form" type="submit" name="action" value="finalize" class="w-full flex items-center justify-center gap-2 px-6 py-3 bg-primary text-slate-900 rounded-xl text-sm font-bold hover:brightness-95 transition-all shadow-lg shadow-primary/20 {% if record.review_status == 'completed' %}opacity-60 cursor-not-allowed{% endif %}" {% if record.review_status == 'completed' %}disabled{% endif %}>

@@ -196,7 +196,7 @@ Awaiting Doctor Review
 </td>
 <td class="px-6 py-5 text-right">
 <div class="flex justify-end gap-2">
-<a href="{% url 'medical_record_file' record.id %}" target="_blank" rel="noopener" class="px-3 py-1.5 text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-primary hover:text-background-dark rounded transition-colors">View Report</a>
+<a href="{% url 'patient_view_report' record.id %}" class="px-3 py-1.5 text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-primary hover:text-background-dark rounded transition-colors">View Report</a>
 <a href="{% url 'medical_record_file' record.id %}" download class="p-1.5 text-slate-400 hover:text-primary transition-colors">
 <span class="material-symbols-outlined text-lg">download</span>
 </a>
