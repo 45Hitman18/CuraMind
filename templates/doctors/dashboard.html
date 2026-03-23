@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CuraMind AI - Radiologist Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df280",
+                        "background-light": "#f5f8f7",
+                        "background-dark": "#102219",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .sidebar-item-active {
+            background-color: rgba(13, 242, 128, 0.15);
+            border-left: 4px solid #0df280;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="flex min-h-screen overflow-hidden">
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0">
+<a href="{% url 'landing_page' %}" class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-slate-900">
+<span class="material-symbols-outlined text-2xl font-bold">psychiatry</span>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-none tracking-tight">CuraMind AI</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Radiology Suite</p>
+</div>
+</a>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="sidebar-item-active flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-900 dark:text-white group" href="{% url 'doctor_dashboard' %}">
+<span class="material-symbols-outlined text-primary">groups</span>
+<span class="text-sm font-semibold">Patient Queue</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_appointments' %}">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-sm font-medium">View Appointments</span>
+{% if pending_appointments_count %}
+<span class="ml-auto bg-primary/20 text-slate-800 dark:text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">{{ pending_appointments_count }}</span>
+{% endif %}
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_reviews' %}">
+<span class="material-symbols-outlined">description</span>
+<span class="text-sm font-medium">My Reviews</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_messages' %}">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-sm font-medium">Messages</span>
+{% if unread_doctor_messages_count %}
+<span class="ml-auto bg-primary/20 text-slate-800 dark:text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">{{ unread_doctor_messages_count }}</span>
+{% endif %}
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_reports' %}">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-sm font-medium">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_profile' %}">
+<span class="material-symbols-outlined">person</span>
+<span class="text-sm font-medium">Profile</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_feedback' %}">
+<span class="material-symbols-outlined">star</span>
+<span class="text-sm font-medium">Patient Feedback</span>
+</a>
+<form method="post" action="{% url 'logout' %}">
+{% csrf_token %}
+<button class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" type="submit">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</button>
+</form>
+</nav>
+<div class="p-4 mt-auto">
+<div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-100 dark:border-slate-700">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-sm">verified_user</span>
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">HIPAA Compliant</span>
+</div>
+<p class="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">Your session is encrypted and secure under healthcare data standards.</p>
+</div>
+<div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div class="min-w-0">
+<p class="text-sm font-semibold truncate">Dr. {{ request.user.get_full_name|default:request.user.username }}</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ doctor_specialization }}</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col overflow-y-auto">
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center justify-between px-8 shrink-0 sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<h2 class="text-xl font-bold tracking-tight">Patient Queue</h2>
+<span class="px-2 py-0.5 bg-primary/20 text-primary-700 text-[10px] font-bold rounded uppercase">Live Feed</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="w-full pl-10 pr-4 py-1.5 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary/50 transition-all" placeholder="Search patient or scan ID..." type="text"/>
+</div>
+</div>
+</header>
+<div class="p-8 space-y-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-6xl text-primary">analytics</span>
+</div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Pending AI Analysis</p>
+<div class="flex items-end gap-3 mt-2">
+<h3 class="text-3xl font-bold">{{ pending_count }}</h3>
+</div>
+<p class="text-[11px] text-slate-400 mt-2 italic">Live queue size</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Urgent Reviews</p>
+<div class="flex items-end gap-3 mt-2">
+<h3 class="text-3xl font-bold text-red-500">{{ urgent_cases_count }}</h3>
+</div>
+<p class="text-xs text-slate-400 mt-4 font-medium">ai_status = high</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Completed Today</p>
+<div class="flex items-end gap-3 mt-2">
+<h3 class="text-3xl font-bold">{{ completed_today_count }}</h3>
+</div>
+<p class="text-xs text-slate-400 mt-4 font-medium">Doctor-reviewed records today</p>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+<div class="xl:col-span-2 space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-bold">Review Queue</h3>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg">Assigned Cases</button>
+<button class="px-3 py-1.5 text-xs font-semibold bg-primary text-slate-900 rounded-lg shadow-sm shadow-primary/20">Urgent Count: {{ urgent_cases_count }}</button>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Patient Name</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Scan Type</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">AI Alert Level</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Status</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+{% for record in assigned_records %}
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="font-semibold text-sm">{{ record.patient.get_full_name|default:record.patient.username }}</div>
+<div class="text-[11px] text-slate-400">ID: #{{ record.scan_id }}</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded text-[10px] font-bold uppercase tracking-tight">{{ record.scan_type }}</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 text-xs font-bold uppercase {% if record.ai_status == 'high' %}text-red-500{% elif record.ai_status == 'medium' %}text-orange-500{% else %}text-slate-400{% endif %}">{{ record.get_ai_status_display }}</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs font-medium bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded text-slate-600 dark:text-slate-400">{{ record.get_review_status_display }}</span>
+</td>
+<td class="px-6 py-4 text-right">
+<a href="{% url 'doctor_start_review' record.id %}" class="bg-primary hover:bg-primary/90 text-slate-900 font-bold text-xs py-1.5 px-4 rounded-lg transition-all shadow-sm shadow-primary/10">Start Review</a>
+</td>
+</tr>
+{% empty %}
+<tr>
+<td colspan="5" class="px-6 py-8 text-center text-sm text-slate-500">No assigned records in queue.</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+<div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/30 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center">
+<span class="text-xs text-slate-500 font-medium">Showing {{ pending_count }} of {{ total_assigned_count }} assigned cases</span>
+</div>
+</div>
+</div>
+<div id="recent-diagnoses" class="space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-bold">Recent Diagnoses</h3>
+</div>
+<div class="space-y-4">
+{% for record in recent_diagnoses %}
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex gap-4">
+<div class="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-slate-400">radiology</span>
+</div>
+<div class="min-w-0">
+<h4 class="text-sm font-bold truncate">{{ record.scan_type }} - {{ record.patient.get_full_name|default:record.patient.username }}</h4>
+<p class="text-[11px] text-slate-500 mt-0.5">Scan ID: {{ record.scan_id }}</p>
+<div class="flex items-center gap-3 mt-2">
+<span class="text-[10px] px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold rounded uppercase">{{ record.reviewed_at|timesince }} ago</span>
+<span class="text-[10px] font-bold text-primary">Reviewed</span>
+</div>
+</div>
+</div>
+{% empty %}
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<p class="text-sm text-slate-500">No completed reviews yet.</p>
+</div>
+{% endfor %}
+</div>
+</div>
+</div>
+</div>
+<footer class="mt-auto p-8 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-slate-400 font-medium">© 2024 CuraMind AI. All Rights Reserved.</p>
+<div class="flex gap-6">
+<a class="text-xs text-slate-400 hover:text-primary transition-colors font-medium" href="#">System Documentation</a>
+<a class="text-xs text-slate-400 hover:text-primary transition-colors font-medium" href="#">Privacy Protocol</a>
+<a class="text-xs text-slate-400 hover:text-primary transition-colors font-medium flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[14px]">verified</span> HIPAA Secure Terminal
+                    </a>
+</div>
+</footer>
+</main>
+</div>
+</body></html>

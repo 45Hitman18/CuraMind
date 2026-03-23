@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CuraMind AI - Manage Appointments</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df280",
+                        "background-light": "#f5f8f7",
+                        "background-dark": "#102219",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar-item-active { background-color: rgba(13, 242, 128, 0.15); border-left: 4px solid #0df280; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0">
+<a href="{% url 'landing_page' %}" class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-slate-900">
+<span class="material-symbols-outlined text-2xl font-bold">psychiatry</span>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-none tracking-tight">CuraMind AI</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Radiology Suite</p>
+</div>
+</a>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_dashboard' %}">
+<span class="material-symbols-outlined">groups</span>
+<span class="text-sm font-medium">Patient Queue</span>
+</a>
+<a class="sidebar-item-active flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-900 dark:text-white group" href="{% url 'doctor_appointments' %}">
+<span class="material-symbols-outlined text-primary">calendar_today</span>
+<span class="text-sm font-semibold">View Appointments</span>
+{% if pending_appointments_count %}
+<span class="ml-auto bg-primary/20 text-slate-800 dark:text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">{{ pending_appointments_count }}</span>
+{% endif %}
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_reviews' %}">
+<span class="material-symbols-outlined">description</span>
+<span class="text-sm font-medium">My Reviews</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_messages' %}">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-sm font-medium">Messages</span>
+{% if unread_doctor_messages_count %}
+<span class="ml-auto bg-primary/20 text-slate-800 dark:text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">{{ unread_doctor_messages_count }}</span>
+{% endif %}
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_reports' %}">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-sm font-medium">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_profile' %}">
+<span class="material-symbols-outlined">person</span>
+<span class="text-sm font-medium">Profile</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_feedback' %}">
+<span class="material-symbols-outlined">star</span>
+<span class="text-sm font-medium">Patient Feedback</span>
+</a>
+<form method="post" action="{% url 'logout' %}">
+{% csrf_token %}
+<button class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" type="submit">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</button>
+</form>
+</nav>
+<div class="p-4 mt-auto">
+<div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-100 dark:border-slate-700">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-sm">verified_user</span>
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">HIPAA Compliant</span>
+</div>
+<p class="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">Your session is encrypted and secure under healthcare data standards.</p>
+</div>
+<div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div class="min-w-0">
+<p class="text-sm font-semibold truncate">Dr. {{ request.user.get_full_name|default:request.user.username }}</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ doctor_specialization }}</p>
+</div>
+</div>
+</div>
+</aside>
+
+<main class="flex-1 flex flex-col min-h-0">
+<header class="flex h-16 items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-8 shrink-0">
+<div class="flex items-center gap-4">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full rounded-lg border-none bg-slate-100 dark:bg-slate-800 py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/50" placeholder="Search by patient name or date..." type="text"/>
+</div>
+</div>
+</header>
+
+<div class="p-8 min-h-0 flex-1 overflow-y-auto space-y-6">
+{% if messages %}
+<div class="space-y-2">
+    {% for message in messages %}
+    <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="flex items-end justify-between gap-4">
+<div>
+<h1 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Manage Appointments</h1>
+<p class="mt-1 text-slate-500 dark:text-slate-400">Review and coordinate diagnostic consultation requests.</p>
+</div>
+<div class="flex gap-2 bg-white dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-800">
+<a href="{% url 'doctor_appointments' %}?status=pending" class="px-4 py-2 text-sm rounded-md {% if status_view == 'pending' %}font-bold bg-primary text-slate-900{% else %}font-medium text-slate-500 hover:text-slate-900 dark:hover:text-white{% endif %}">Pending ({{ pending_count }})</a>
+<a href="{% url 'doctor_appointments' %}?status=approved" class="px-4 py-2 text-sm rounded-md {% if status_view == 'approved' %}font-bold bg-primary text-slate-900{% else %}font-medium text-slate-500 hover:text-slate-900 dark:hover:text-white{% endif %}">Approved ({{ approved_count }})</a>
+<a href="{% url 'doctor_appointments' %}?status=history" class="px-4 py-2 text-sm rounded-md {% if status_view == 'history' %}font-bold bg-primary text-slate-900{% else %}font-medium text-slate-500 hover:text-slate-900 dark:hover:text-white{% endif %}">History ({{ history_count }})</a>
+</div>
+</div>
+
+<div class="grid grid-cols-12 gap-8 min-h-0">
+<div class="col-span-8">
+<div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50">
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Patient</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Schedule</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Service Type</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+{% for appointment in appointments %}
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors {% if selected_appointment and selected_appointment.id == appointment.id %}bg-primary/5{% endif %}">
+<td class="px-6 py-5">
+<a href="{% url 'doctor_appointments' %}?status={{ status_view }}&appointment={{ appointment.id }}" class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold">{{ appointment.patient.username|slice:":1"|upper }}</div>
+<div>
+<p class="text-sm font-bold">{{ appointment.patient.get_full_name|default:appointment.patient.username }}</p>
+<p class="text-xs text-slate-500">ID: #P{{ appointment.patient.id }}</p>
+</div>
+</a>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-medium">{{ appointment.datetime|date:"M d, Y" }}</span>
+<span class="text-xs text-slate-500">{{ appointment.datetime|date:"h:i A" }}</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-medium text-slate-800 dark:text-slate-200">
+{{ appointment.reason|default:"Consultation" }}
+</span>
+</td>
+<td class="px-6 py-5 text-right">
+{% if appointment.status == 'pending' %}
+<div class="flex justify-end gap-2">
+<form method="post" action="{% url 'doctor_appointments' %}?status={{ status_view }}">
+{% csrf_token %}
+<input type="hidden" name="appointment_id" value="{{ appointment.id }}"/>
+<input type="hidden" name="action" value="reject"/>
+<button class="p-1.5 text-red-500 hover:bg-red-50 rounded transition-colors" title="Reject" type="submit">
+<span class="material-symbols-outlined">close</span>
+</button>
+</form>
+<form method="post" action="{% url 'doctor_appointments' %}?status={{ status_view }}">
+{% csrf_token %}
+<input type="hidden" name="appointment_id" value="{{ appointment.id }}"/>
+<input type="hidden" name="action" value="approve"/>
+<button class="p-1.5 text-primary hover:bg-primary/10 rounded transition-colors" title="Approve" type="submit">
+<span class="material-symbols-outlined">check</span>
+</button>
+</form>
+</div>
+{% else %}
+<span class="text-xs font-bold uppercase {% if appointment.status == 'approved' or appointment.status == 'scheduled' %}text-emerald-600{% elif appointment.status == 'rejected' %}text-rose-600{% else %}text-slate-500{% endif %}">{{ appointment.get_status_display }}</span>
+{% endif %}
+</td>
+</tr>
+{% empty %}
+<tr>
+<td colspan="4" class="px-6 py-10 text-center text-slate-500">No appointments in this section.</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="col-span-4">
+<div class="sticky top-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-lg overflow-hidden flex flex-col h-[calc(100vh-180px)]">
+{% if selected_appointment %}
+<div class="p-6 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+<div class="flex justify-between items-start mb-4">
+<span class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider {% if selected_appointment.status == 'pending' %}bg-orange-100 text-orange-700{% elif selected_appointment.status == 'approved' or selected_appointment.status == 'scheduled' %}bg-emerald-100 text-emerald-700{% elif selected_appointment.status == 'rejected' %}bg-rose-100 text-rose-700{% else %}bg-slate-100 text-slate-700{% endif %}">{{ selected_appointment.get_status_display }}</span>
+<span class="text-xs text-slate-500">Req: #REQ-{{ selected_appointment.id }}</span>
+</div>
+<h3 class="text-xl font-bold">{{ selected_appointment.patient.get_full_name|default:selected_appointment.patient.username }}</h3>
+<p class="text-sm text-slate-500">Appointment at {{ selected_appointment.datetime|date:"M d, Y • h:i A" }}</p>
+</div>
+
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<div>
+<h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Reason for visit</h4>
+<p class="text-sm leading-relaxed">{{ selected_appointment.reason|default:"Consultation" }}</p>
+</div>
+
+<div>
+<h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Insurance Provider</h4>
+<p class="text-sm leading-relaxed">{{ selected_appointment.insurance_provider|default:"Not provided" }}</p>
+</div>
+
+<div>
+<h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Patient Notes</h4>
+<div class="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 italic text-sm text-slate-600 dark:text-slate-400 border-l-2 border-primary">
+{{ selected_appointment.patient_notes|default:"No additional notes from patient." }}
+</div>
+</div>
+
+<div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-sm">history</span>
+<span class="text-xs font-bold">Patient ID #P{{ selected_appointment.patient.id }}</span>
+</div>
+</div>
+</div>
+
+<div class="p-6 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex gap-3">
+{% if selected_appointment.status == 'pending' %}
+<form method="post" action="{% url 'doctor_appointments' %}?status={{ status_view }}" class="flex-1">
+{% csrf_token %}
+<input type="hidden" name="appointment_id" value="{{ selected_appointment.id }}"/>
+<input type="hidden" name="action" value="reject"/>
+<button class="w-full px-4 py-3 rounded-lg border-2 border-red-500 text-red-500 font-bold text-sm hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors" type="submit">
+Reject Request
+</button>
+</form>
+<form method="post" action="{% url 'doctor_appointments' %}?status={{ status_view }}" class="flex-1">
+{% csrf_token %}
+<input type="hidden" name="appointment_id" value="{{ selected_appointment.id }}"/>
+<input type="hidden" name="action" value="approve"/>
+<button class="w-full px-4 py-3 rounded-lg bg-primary text-slate-900 font-bold text-sm hover:opacity-90 transition-opacity" type="submit">
+Approve Appointment
+</button>
+</form>
+{% else %}
+<div class="w-full text-center text-sm text-slate-500 font-medium">This appointment is already {{ selected_appointment.get_status_display|lower }}.</div>
+{% endif %}
+</div>
+{% else %}
+<div class="h-full flex items-center justify-center p-6 text-center text-slate-500">
+<div>
+<span class="material-symbols-outlined text-4xl mb-2">event_note</span>
+<p>Select an appointment to see details.</p>
+</div>
+</div>
+{% endif %}
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+setTimeout(function () { window.location.reload(); }, 30000);
+</script>
+</body></html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Schedule Appointment | CuraMind AI Patient Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df280",
+                        "background-light": "#f5f8f7",
+                        "background-dark": "#102219",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .active-nav { background-color: rgba(13, 242, 128, 0.1); border-right: 4px solid #0df280; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="p-6">
+<a href="{% url 'landing_page' %}" class="flex items-center gap-3">
+<div class="bg-primary rounded-lg p-1.5">
+<span class="material-symbols-outlined text-slate-900 text-2xl">neurology</span>
+</div>
+<div>
+<h1 class="text-slate-900 dark:text-white text-lg font-bold leading-none">CuraMind AI</h1>
+<p class="text-xs text-slate-500 font-medium mt-1">Patient Portal</p>
+</div>
+</a>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_dashboard' %}">
+<span class="material-symbols-outlined">dashboard</span>
+                    Home/Dashboard
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_medical_records' %}">
+<span class="material-symbols-outlined">description</span>
+                    My Medical Records
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_appointments' %}">
+<span class="material-symbols-outlined">calendar_today</span>
+                    Appointments
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg active-nav text-slate-900 dark:text-white font-medium" href="{% url 'patient_schedule_appointment' %}">
+<span class="material-symbols-outlined">event_available</span>
+                    Schedule Appointment
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_messages' %}">
+<span class="material-symbols-outlined">chat_bubble</span>
+                    Messages
+                    <span class="ml-auto bg-primary/20 text-slate-800 dark:text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">{{ unread_messages_count }}</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_profile' %}">
+<span class="material-symbols-outlined">person</span>
+                    Profile
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_feedback' %}">
+<span class="material-symbols-outlined">star</span>
+                    Feedback & Rating
+                </a>
+<form method="post" action="{% url 'logout' %}">
+{% csrf_token %}
+<button class="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" type="submit">
+<span class="material-symbols-outlined">logout</span>
+                    Logout
+                </button>
+</form>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<a href="{% url 'upload_scan' %}" class="w-full bg-primary hover:bg-primary/90 text-slate-900 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined">cloud_upload</span>
+                    Upload New Scan
+                </a>
+<div class="mt-4 flex items-center gap-2 justify-center py-2 px-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined text-sm text-primary">verified_user</span>
+<span class="text-[10px] uppercase tracking-wider font-bold text-slate-500">HIPAA Compliant</span>
+</div>
+</div>
+</aside>
+
+<main class="flex-1 flex flex-col overflow-y-auto">
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500">event_available</span>
+<h2 class="text-slate-900 dark:text-white font-bold text-xl">Schedule Appointment</h2>
+</div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold text-slate-900 dark:text-white leading-none">{{ request.user.get_full_name|default:request.user.username }}</p>
+<p class="text-[10px] font-medium text-slate-500 mt-1 uppercase tracking-tight">Patient Account</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+</div>
+</header>
+
+<div class="p-8 space-y-8">
+{% if messages %}
+<div class="space-y-2">
+    {% for message in messages %}
+    <div class="rounded-lg border px-4 py-3 text-sm {% if 'success' in message.tags %}border-emerald-200 bg-emerald-50 text-emerald-800{% else %}border-rose-200 bg-rose-50 text-rose-800{% endif %}">{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div>
+<h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Book with a Real Available Doctor</h1>
+<p class="text-slate-500 font-medium mt-1">Live availability from currently registered doctors in your portal.</p>
+</div>
+
+<div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
+<form method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+<div>
+<label class="block text-sm font-bold mb-2" for="doctor">Select Doctor</label>
+<select id="doctor" name="doctor" class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary">
+<option value="">Choose doctor</option>
+{% for item in available_doctors %}
+<option value="{{ item.user.id }}" {% if selected_doctor and selected_doctor.id == item.user.id %}selected{% endif %}>Dr. {{ item.user.get_full_name|default:item.user.username }}</option>
+{% endfor %}
+</select>
+</div>
+<div>
+<label class="block text-sm font-bold mb-2" for="date">Appointment Date</label>
+<input id="date" name="date" type="date" value="{{ selected_date }}" min="{% now 'Y-m-d' %}" class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary"/>
+</div>
+<div>
+<button class="w-full bg-primary hover:bg-primary/90 text-slate-900 font-bold py-3 px-4 rounded-xl transition-all" type="submit">Check Live Availability</button>
+</div>
+</form>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+{% for item in available_doctors %}
+<a href="{% url 'patient_schedule_appointment' %}?doctor={{ item.user.id }}&date={{ selected_date }}" class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-primary transition-colors {% if selected_doctor and selected_doctor.id == item.user.id %}ring-2 ring-primary/20 border-primary/60{% endif %}">
+<div class="flex items-center justify-between gap-3">
+<div class="min-w-0">
+<h3 class="font-bold text-slate-900 dark:text-white truncate">Dr. {{ item.user.get_full_name|default:item.user.username }}</h3>
+<p class="text-xs text-primary font-semibold uppercase mt-1">{{ item.specialization }}</p>
+</div>
+<span class="material-symbols-outlined text-primary text-lg">verified</span>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="text-xs bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-slate-600 dark:text-slate-300">{{ item.available_slots_count }} available slots</span>
+<span class="text-xs text-slate-500">{{ item.booked_slots_count }} booked</span>
+</div>
+</a>
+{% empty %}
+<div class="col-span-full bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500">No registered doctors available yet.</div>
+{% endfor %}
+</div>
+
+<div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 space-y-6">
+<div>
+<h3 class="text-xl font-bold">Finalize Appointment</h3>
+<p class="text-sm text-slate-500 mt-1">Select an available time slot and confirm your booking.</p>
+</div>
+
+<form method="post" class="space-y-6">
+{% csrf_token %}
+<input type="hidden" name="doctor_id" value="{% if selected_doctor %}{{ selected_doctor.id }}{% endif %}">
+<input type="hidden" name="appointment_date" value="{{ selected_date }}">
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Selected Doctor</label>
+<div class="w-full rounded-lg border border-slate-200 dark:border-slate-700 px-4 py-3 text-sm">
+{% if selected_doctor %}
+Dr. {{ selected_doctor.get_full_name|default:selected_doctor.username }}
+{% else %}
+Choose a doctor first
+{% endif %}
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Selected Date</label>
+<div class="w-full rounded-lg border border-slate-200 dark:border-slate-700 px-4 py-3 text-sm">{{ selected_date }}</div>
+</div>
+</div>
+
+<div class="space-y-3">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Available Time Slots</label>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+{% for slot in available_slots %}
+<label class="block">
+<input type="radio" name="appointment_time" value="{{ slot.value }}" class="peer sr-only" {% if not slot.is_available %}disabled{% endif %}>
+<span class="block p-3 rounded-lg border text-center text-sm font-medium transition-all {% if slot.is_available %}border-slate-200 dark:border-slate-700 hover:border-primary cursor-pointer peer-checked:border-primary peer-checked:bg-primary/10{% else %}border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-400 cursor-not-allowed{% endif %}">
+{{ slot.label }}
+</span>
+</label>
+{% empty %}
+<p class="text-sm text-slate-500 col-span-full">Choose a doctor to view live slots.</p>
+{% endfor %}
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Reason for Visit</label>
+<select class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary" name="reason">
+<option>Consultation</option>
+<option>Follow-up</option>
+<option>Urgent Issue</option>
+<option>Results Review</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Insurance Provider</label>
+<input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary" placeholder="e.g. BlueCross" type="text" name="insurance"/>
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Additional Notes</label>
+<textarea class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary" placeholder="Briefly describe your symptoms..." rows="3" name="notes"></textarea>
+</div>
+
+<div class="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-800">
+<a href="{% url 'patient_appointments' %}" class="px-6 py-3 text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">Cancel</a>
+<button class="px-8 py-3 bg-primary text-slate-900 font-bold rounded-xl shadow-lg shadow-primary/20 hover:brightness-110 transition-all" type="submit">Proceed to Confirmation</button>
+</div>
+</form>
+</div>
+</div>
+</main>
+</div>
+</body></html>

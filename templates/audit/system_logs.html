@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        primary: "#0df280",
+        "background-light": "#f5f8f7",
+        "background-dark": "#102219",
+      },
+      fontFamily: {
+        display: ["Inter", "sans-serif"],
+      },
+      borderRadius: {
+        DEFAULT: "0.25rem",
+        lg: "0.5rem",
+        xl: "0.75rem",
+        full: "9999px",
+      },
+    },
+  },
+};
+</script>
+<title>System Logs | CuraMind AI Admin</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="flex min-h-screen">
+  <aside class="w-72 fixed h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col">
+    <a href="{% url 'landing_page' %}" class="p-6 flex items-center gap-3">
+      <div class="bg-primary rounded-lg p-2 flex items-center justify-center">
+        <svg class="w-5 h-5 text-slate-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3h1v2H8a2 2 0 1 0 0 4h8a2 2 0 1 0 0-4h-2v-2h1a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3H9z"/></svg>
+      </div>
+      <div>
+        <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white leading-none">CuraMind AI</h1>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-wider font-semibold">Admin Dashboard</p>
+      </div>
+    </a>
+
+    <nav class="flex-1 px-4 py-4 space-y-1">
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="{% url 'admin_overview' %}">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13h8V3H3v10zm10 8h8V11h-8v10zM3 21h8v-6H3v6zm10-10h8V3h-8v8z"/></svg>
+        <span class="text-sm font-medium">Platform Overview</span>
+      </a>
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="{% url 'admin_user_management' %}">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="text-sm font-medium">User Management</span>
+      </a>
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-slate-900 font-semibold" href="{% url 'admin_system_logs' %}">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v4H4z"/><path d="M4 10h16v10H4z"/><path d="M10 14h4"/></svg>
+        <span class="text-sm">System Logs</span>
+      </a>
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="{% url 'admin_settings' %}">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0A1.65 1.65 0 0 0 9.91 3.1V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span class="text-sm font-medium">Settings</span>
+      </a>
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="{% url 'admin_feedback' %}">
+        <svg class="w-5 h-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4-6.2-4.5h7.6z"/></svg>
+        <span class="text-sm font-medium">Patient Feedback</span>
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-slate-200 dark:border-slate-800">
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="w-full flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span class="text-sm font-medium">Logout</span>
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <main class="flex-1 ml-72">
+    <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10 px-8 flex items-center justify-between">
+      <h2 class="text-lg font-bold">System Logs & Audit Trail</h2>
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="text-right min-w-0">
+          <p class="text-sm font-bold leading-none truncate">{{ request.user.get_full_name|default:request.user.username }}</p>
+          <p class="text-xs text-slate-500 mt-1 truncate">{{ request.user.role|title }}</p>
+        </div>
+        <div class="size-9 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 9.5-8 10-4.5-.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+      </div>
+    </header>
+
+    <div class="p-8 space-y-8 bg-slate-50 dark:bg-slate-950 min-h-[calc(100vh-64px)]">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Logs</p>
+          <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-2">{{ total_logs }}</h3>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Security Alerts</p>
+          <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-2">{{ security_alerts }}</h3>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Critical Actions</p>
+          <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-2">{{ critical_actions }}</h3>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Active Sessions (24h)</p>
+          <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-2">{{ active_sessions }}</h3>
+        </div>
+      </div>
+
+      <div class="flex flex-col lg:flex-row gap-8">
+        <div class="flex-1 space-y-4">
+          <form method="get" class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-wrap gap-4 items-end">
+            <div class="flex-1 min-w-[220px] relative">
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Search</label>
+              <input name="q" value="{{ query }}" class="w-full pl-4 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-primary" placeholder="User, action, object, IP" type="text"/>
+            </div>
+            <div class="min-w-[150px]">
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Log Level</label>
+              <select name="level" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-primary">
+                <option value="all" {% if level_filter == 'all' %}selected{% endif %}>All Levels</option>
+                <option value="info" {% if level_filter == 'info' %}selected{% endif %}>Info</option>
+                <option value="warning" {% if level_filter == 'warning' %}selected{% endif %}>Warning</option>
+                <option value="critical" {% if level_filter == 'critical' %}selected{% endif %}>Critical</option>
+              </select>
+            </div>
+            <div class="min-w-[150px]">
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Category</label>
+              <select name="category" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-primary">
+                <option value="all" {% if category_filter == 'all' %}selected{% endif %}>All Categories</option>
+                <option value="access" {% if category_filter == 'access' %}selected{% endif %}>Access</option>
+                <option value="security" {% if category_filter == 'security' %}selected{% endif %}>Security</option>
+                <option value="data" {% if category_filter == 'data' %}selected{% endif %}>Data</option>
+                <option value="user" {% if category_filter == 'user' %}selected{% endif %}>User</option>
+                <option value="system" {% if category_filter == 'system' %}selected{% endif %}>System</option>
+              </select>
+            </div>
+            <div class="min-w-[150px]">
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Date Range</label>
+              <select name="period" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-primary">
+                <option value="24h" {% if period_filter == '24h' %}selected{% endif %}>Last 24h</option>
+                <option value="7d" {% if period_filter == '7d' %}selected{% endif %}>Last 7 days</option>
+                <option value="30d" {% if period_filter == '30d' %}selected{% endif %}>Last 30 days</option>
+              </select>
+            </div>
+            <button class="bg-slate-100 dark:bg-slate-800 px-6 py-2 rounded-lg font-bold text-sm hover:bg-slate-200 transition-colors" type="submit">Apply Filters</button>
+            <a href="?q={{ query|urlencode }}&level={{ level_filter }}&category={{ category_filter }}&period={{ period_filter }}&export=csv" class="bg-primary text-slate-900 px-4 py-2 rounded-lg font-bold text-sm">Export CSV</a>
+          </form>
+
+          <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Timestamp</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">User</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Action</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">IP Address</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                  {% for item in logs %}
+                  <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">{{ item.timestamp|date:"M d, Y H:i:s" }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="flex items-center gap-3">
+                        <div class="size-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-slate-700">{{ item.user_initials }}</div>
+                        <div>
+                          <p class="text-sm font-bold">{{ item.user_name }}</p>
+                          <p class="text-[10px] text-slate-500 uppercase font-bold">{{ item.user_role }}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{{ item.action_text }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-slate-500">{{ item.ip_address }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right">
+                      {% if item.status == 'failure' %}
+                      <span class="px-2 py-1 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-[10px] font-bold uppercase">Failure</span>
+                      {% else %}
+                      <span class="px-2 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold uppercase">Success</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="5" class="px-6 py-8 text-center text-sm text-slate-500">No logs found for selected filters.</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <div class="p-4 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between border-t border-slate-200 dark:border-slate-800">
+              <p class="text-xs text-slate-500 font-medium">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }} logs</p>
+              <div class="flex gap-2">
+                {% if page_obj.has_previous %}
+                <a href="?q={{ query|urlencode }}&level={{ level_filter }}&category={{ category_filter }}&period={{ period_filter }}&page={{ page_obj.previous_page_number }}" class="px-3 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-xs font-bold">Prev</a>
+                {% else %}
+                <button class="px-3 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-xs font-bold opacity-50" disabled>Prev</button>
+                {% endif %}
+                <span class="px-3 py-1 bg-primary text-slate-900 rounded text-xs font-bold">{{ page_obj.number }}</span>
+                {% if page_obj.has_next %}
+                <a href="?q={{ query|urlencode }}&level={{ level_filter }}&category={{ category_filter }}&period={{ period_filter }}&page={{ page_obj.next_page_number }}" class="px-3 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-xs font-bold">Next</a>
+                {% else %}
+                <button class="px-3 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-xs font-bold opacity-50" disabled>Next</button>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="w-full lg:w-80 space-y-6">
+          <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <h4 class="text-slate-900 dark:text-white font-bold text-base mb-4">Audit Compliance</h4>
+            <div class="space-y-4">
+              <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-xs font-bold text-slate-500 uppercase">Security Events</span>
+                  <span class="text-xs font-bold text-red-500">{{ security_alerts }}</span>
+                </div>
+                <p class="text-[11px] text-slate-500">Permission denials and restricted events in selected range.</p>
+              </div>
+              <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-xs font-bold text-slate-500 uppercase">Critical Actions</span>
+                  <span class="text-xs font-bold text-amber-500">{{ critical_actions }}</span>
+                </div>
+                <p class="text-[11px] text-slate-500">Block-user and permission-denied activities.</p>
+              </div>
+              <div class="p-4 rounded-lg bg-slate-50 dark:bg-slate-800">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-xs font-bold text-slate-500 uppercase">Active Sessions</span>
+                  <span class="text-xs font-bold text-primary">{{ active_sessions }}</span>
+                </div>
+                <p class="text-[11px] text-slate-500">Distinct successful login users in last 24h.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-primary/5 dark:bg-primary/5 p-6 rounded-xl border border-primary/20">
+            <h4 class="text-slate-900 dark:text-white font-bold text-base mb-2">Auto-Archive</h4>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">System logs older than policy retention are archived for audit compliance. Use CSV export for operational reviews.</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

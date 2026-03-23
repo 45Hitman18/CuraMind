@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CuraMind AI - My Reviews</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df280",
+                        "background-light": "#f5f8f7",
+                        "background-dark": "#102219",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar-item-active { background-color: rgba(13, 242, 128, 0.15); border-left: 4px solid #0df280; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0">
+<a href="{% url 'landing_page' %}" class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-slate-900">
+<span class="material-symbols-outlined text-2xl font-bold">psychiatry</span>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-none tracking-tight">CuraMind AI</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Radiology Suite</p>
+</div>
+</a>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_dashboard' %}">
+<span class="material-symbols-outlined">groups</span>
+<span class="text-sm font-medium">Patient Queue</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_appointments' %}">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-sm font-medium">View Appointments</span>
+{% if pending_appointments_count %}
+<span class="ml-auto bg-primary/20 text-slate-800 dark:text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">{{ pending_appointments_count }}</span>
+{% endif %}
+</a>
+<a class="sidebar-item-active flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-900 dark:text-white group" href="{% url 'doctor_reviews' %}">
+<span class="material-symbols-outlined text-primary">description</span>
+<span class="text-sm font-semibold">My Reviews</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_messages' %}">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-sm font-medium">Messages</span>
+{% if unread_doctor_messages_count %}
+<span class="ml-auto bg-primary/20 text-slate-800 dark:text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">{{ unread_doctor_messages_count }}</span>
+{% endif %}
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_reports' %}">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-sm font-medium">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_profile' %}">
+<span class="material-symbols-outlined">person</span>
+<span class="text-sm font-medium">Profile</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_feedback' %}">
+<span class="material-symbols-outlined">star</span>
+<span class="text-sm font-medium">Patient Feedback</span>
+</a>
+<form method="post" action="{% url 'logout' %}">
+{% csrf_token %}
+<button class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" type="submit">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</button>
+</form>
+</nav>
+<div class="p-4 mt-auto">
+<div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-100 dark:border-slate-700">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-sm">verified_user</span>
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">HIPAA Compliant</span>
+</div>
+<p class="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">Your session is encrypted and secure under healthcare data standards.</p>
+</div>
+<div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div class="min-w-0">
+<p class="text-sm font-semibold truncate">Dr. {{ request.user.get_full_name|default:request.user.username }}</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ doctor_specialization }}</p>
+</div>
+</div>
+</div>
+</aside>
+
+<main class="flex-1 flex flex-col min-h-0">
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-8 shrink-0 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500">description</span>
+<h2 class="text-xl font-bold tracking-tight">My Reviews</h2>
+</div>
+</header>
+
+<div class="p-8 min-h-0 flex-1 overflow-y-auto space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-sm">
+<p class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Reviews</p>
+<p class="mt-2 text-3xl font-black">{{ total_reviews_count }}</p>
+</div>
+<div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-sm">
+<p class="text-xs font-bold uppercase tracking-wider text-slate-500">Completed</p>
+<p class="mt-2 text-3xl font-black text-emerald-600">{{ completed_reviews_count }}</p>
+</div>
+<div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-sm">
+<p class="text-xs font-bold uppercase tracking-wider text-slate-500">In Progress</p>
+<p class="mt-2 text-3xl font-black text-orange-500">{{ in_progress_reviews_count }}</p>
+</div>
+<div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-sm">
+<p class="text-xs font-bold uppercase tracking-wider text-slate-500">Reviewed Today</p>
+<p class="mt-2 text-3xl font-black">{{ reviewed_today_count }}</p>
+</div>
+</div>
+
+<div class="flex items-end justify-between gap-4">
+<div>
+<h1 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Review History</h1>
+<p class="mt-1 text-slate-500 dark:text-slate-400">Track all records that you have reviewed.</p>
+</div>
+<div class="flex gap-2 bg-white dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-800">
+<a href="{% url 'doctor_reviews' %}?status=all" class="px-4 py-2 text-sm rounded-md {% if status_view == 'all' %}font-bold bg-primary text-slate-900{% else %}font-medium text-slate-500 hover:text-slate-900 dark:hover:text-white{% endif %}">All ({{ total_reviews_count }})</a>
+<a href="{% url 'doctor_reviews' %}?status=completed" class="px-4 py-2 text-sm rounded-md {% if status_view == 'completed' %}font-bold bg-primary text-slate-900{% else %}font-medium text-slate-500 hover:text-slate-900 dark:hover:text-white{% endif %}">Completed ({{ completed_reviews_count }})</a>
+<a href="{% url 'doctor_reviews' %}?status=in_progress" class="px-4 py-2 text-sm rounded-md {% if status_view == 'in_progress' %}font-bold bg-primary text-slate-900{% else %}font-medium text-slate-500 hover:text-slate-900 dark:hover:text-white{% endif %}">In Progress ({{ in_progress_reviews_count }})</a>
+</div>
+</div>
+
+<div class="grid grid-cols-12 gap-8 min-h-0">
+<div class="col-span-8">
+<div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50">
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Patient</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Scan</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">AI Alert</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+{% for record in review_records %}
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors {% if selected_record and selected_record.id == record.id %}bg-primary/5{% endif %}">
+<td class="px-6 py-5">
+<a href="{% url 'doctor_reviews' %}?status={{ status_view }}&record={{ record.id }}" class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold">{{ record.patient.username|slice:":1"|upper }}</div>
+<div>
+<p class="text-sm font-bold">{{ record.patient.get_full_name|default:record.patient.username }}</p>
+<p class="text-xs text-slate-500">Patient #P{{ record.patient.id }}</p>
+</div>
+</a>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm font-semibold">{{ record.scan_type }}</p>
+<p class="text-xs text-slate-500">{{ record.scan_id }}</p>
+</td>
+<td class="px-6 py-5">
+<span class="text-xs font-bold uppercase {% if record.ai_status == 'high' %}text-red-500{% elif record.ai_status == 'medium' %}text-orange-500{% elif record.ai_status == 'low' %}text-blue-500{% else %}text-slate-500{% endif %}">{{ record.get_ai_status_display }}</span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium {% if record.review_status == 'completed' %}bg-emerald-100 text-emerald-700{% elif record.review_status == 'in_progress' %}bg-orange-100 text-orange-700{% else %}bg-slate-100 text-slate-700{% endif %}">{{ record.get_review_status_display }}</span>
+</td>
+</tr>
+{% empty %}
+<tr>
+<td colspan="4" class="px-6 py-10 text-center text-slate-500">No review records found for this filter.</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="col-span-4">
+<div class="sticky top-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-lg overflow-hidden flex flex-col h-[calc(100vh-210px)]">
+{% if selected_record %}
+<div class="p-6 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+<span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Selected Review</span>
+<h3 class="mt-2 text-lg font-bold">{{ selected_record.scan_type }}</h3>
+<p class="text-sm text-slate-500">{{ selected_record.scan_id }}</p>
+</div>
+<div class="flex-1 overflow-y-auto p-6 space-y-5">
+<div>
+<h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Patient</h4>
+<p class="text-sm font-semibold">{{ selected_record.patient.get_full_name|default:selected_record.patient.username }}</p>
+<p class="text-xs text-slate-500">Patient ID #P{{ selected_record.patient.id }}</p>
+</div>
+<div>
+<h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">AI Alert Level</h4>
+<p class="text-sm">{{ selected_record.get_ai_status_display }}</p>
+</div>
+<div>
+<h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Review Status</h4>
+<p class="text-sm">{{ selected_record.get_review_status_display }}</p>
+</div>
+<div>
+<h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Last Updated</h4>
+<p class="text-sm">{% if selected_record.reviewed_at %}{{ selected_record.reviewed_at|date:"M d, Y • h:i A" }}{% else %}Not reviewed yet{% endif %}</p>
+</div>
+</div>
+<div class="p-6 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+<a href="{% url 'doctor_record_file' selected_record.id %}" target="_blank" class="w-full inline-flex items-center justify-center px-4 py-3 rounded-lg bg-primary text-slate-900 font-bold text-sm hover:opacity-90 transition-opacity">Open Scan File</a>
+</div>
+{% else %}
+<div class="h-full flex items-center justify-center p-6 text-center text-slate-500">
+<div>
+<span class="material-symbols-outlined text-4xl mb-2">description</span>
+<p>No review selected.</p>
+</div>
+</div>
+{% endif %}
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

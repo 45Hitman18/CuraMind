@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CuraMind AI - Upload New Scan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df280",
+                        "background-light": "#f5f8f7",
+                        "background-dark": "#102219",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .active-nav { background-color: rgba(13, 242, 128, 0.1); border-right: 4px solid #0df280; }
+        .scan-choice input:checked + div { border-color: #0df280; box-shadow: 0 0 0 2px rgba(13,242,128,0.25); }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="p-6">
+<a href="{% url 'landing_page' %}" class="flex items-center gap-3">
+<div class="bg-primary rounded-lg p-1.5">
+<span class="material-symbols-outlined text-slate-900 text-2xl">neurology</span>
+</div>
+<div>
+<h1 class="text-slate-900 dark:text-white text-lg font-bold leading-none">CuraMind AI</h1>
+<p class="text-xs text-slate-500 font-medium mt-1">Patient Portal</p>
+</div>
+</a>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_dashboard' %}">
+<span class="material-symbols-outlined">dashboard</span>
+                    Home/Dashboard
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg active-nav text-slate-900 dark:text-white font-medium" href="{% url 'patient_medical_records' %}">
+<span class="material-symbols-outlined">description</span>
+                    My Medical Records
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_appointments' %}">
+<span class="material-symbols-outlined">calendar_today</span>
+                    Appointments
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_schedule_appointment' %}">
+<span class="material-symbols-outlined">event_available</span>
+                    Schedule Appointment
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_messages' %}">
+<span class="material-symbols-outlined">chat_bubble</span>
+                    Messages
+                    <span class="ml-auto bg-primary/20 text-slate-800 dark:text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">{{ unread_messages_count }}</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_profile' %}">
+<span class="material-symbols-outlined">person</span>
+                    Profile
+                </a>
+<form method="post" action="{% url 'logout' %}">
+{% csrf_token %}
+<button class="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" type="submit">
+<span class="material-symbols-outlined">logout</span>
+                    Logout
+                </button>
+</form>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<a href="{% url 'upload_scan' %}" class="w-full bg-primary hover:bg-primary/90 text-slate-900 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined">cloud_upload</span>
+                    Upload New Scan
+                </a>
+<div class="mt-4 flex items-center gap-2 justify-center py-2 px-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined text-sm text-primary">verified_user</span>
+<span class="text-[10px] uppercase tracking-wider font-bold text-slate-500">HIPAA Compliant</span>
+</div>
+</div>
+</aside>
+
+<main class="flex-1 flex flex-col overflow-y-auto">
+<header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
+<div class="flex items-center gap-2 text-slate-500 text-sm">
+<span>Portal</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-slate-900 dark:text-white font-semibold">Upload New Scan</span>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative text-slate-400">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+<div class="h-8 w-[1px] bg-slate-200 dark:border-slate-800"></div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-primary px-2 py-1 bg-primary/10 rounded">HIPAA COMPLIANT</span>
+</div>
+</div>
+</header>
+
+<div class="p-8 max-w-5xl mx-auto w-full">
+<div class="mb-8">
+<h2 class="text-3xl font-black text-slate-900 dark:text-white mb-2">New Scan Analysis</h2>
+<p class="text-slate-500">Submit your medical imaging for advanced AI diagnostic processing.</p>
+</div>
+
+{% if form.non_field_errors %}
+<div class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+{{ form.non_field_errors }}
+</div>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data" class="space-y-12">
+{% csrf_token %}
+
+<section>
+<div class="flex items-center gap-3 mb-6">
+<span class="w-8 h-8 rounded-full bg-primary text-slate-900 flex items-center justify-center font-bold text-sm">1</span>
+<h3 class="text-xl font-bold">Select Scan Type</h3>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<label class="scan-choice cursor-pointer">
+<input class="sr-only" type="radio" name="scan_type" value="MRI" {% if form.scan_type.value == 'MRI' %}checked{% endif %} required>
+<div class="flex flex-col items-center gap-3 p-5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 shadow-sm hover:border-primary/50 transition-all">
+<span class="material-symbols-outlined text-4xl text-primary">radiology</span>
+<div class="text-center">
+<p class="font-bold">MRI</p>
+<p class="text-xs text-slate-500">Magnetic Resonance</p>
+</div>
+</div>
+</label>
+<label class="scan-choice cursor-pointer">
+<input class="sr-only" type="radio" name="scan_type" value="X-Ray" {% if form.scan_type.value == 'X-Ray' %}checked{% endif %} required>
+<div class="flex flex-col items-center gap-3 p-5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 shadow-sm hover:border-primary/50 transition-all">
+<span class="material-symbols-outlined text-4xl text-slate-400">skeleton</span>
+<div class="text-center">
+<p class="font-bold">X-Ray</p>
+<p class="text-xs text-slate-500">Radiography</p>
+</div>
+</div>
+</label>
+<label class="scan-choice cursor-pointer">
+<input class="sr-only" type="radio" name="scan_type" value="CT Scan" {% if form.scan_type.value == 'CT Scan' %}checked{% endif %} required>
+<div class="flex flex-col items-center gap-3 p-5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 shadow-sm hover:border-primary/50 transition-all">
+<span class="material-symbols-outlined text-4xl text-slate-400">layers</span>
+<div class="text-center">
+<p class="font-bold">CT Scan</p>
+<p class="text-xs text-slate-500">Computed Tomography</p>
+</div>
+</div>
+</label>
+<label class="scan-choice cursor-pointer">
+<input class="sr-only" type="radio" name="scan_type" value="Ultrasound" {% if form.scan_type.value == 'Ultrasound' %}checked{% endif %} required>
+<div class="flex flex-col items-center gap-3 p-5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 shadow-sm hover:border-primary/50 transition-all">
+<span class="material-symbols-outlined text-4xl text-slate-400">waves</span>
+<div class="text-center">
+<p class="font-bold">Ultrasound</p>
+<p class="text-xs text-slate-500">Sonography</p>
+</div>
+</div>
+</label>
+</div>
+{% if form.scan_type.errors %}
+<div class="mt-2 text-sm text-rose-600">{{ form.scan_type.errors }}</div>
+{% endif %}
+</section>
+
+<section>
+<div class="flex items-center gap-3 mb-6">
+<span class="w-8 h-8 rounded-full bg-primary text-slate-900 flex items-center justify-center font-bold text-sm">2</span>
+<h3 class="text-xl font-bold">Secure File Upload</h3>
+</div>
+<label for="id_uploaded_file" class="border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 p-12 flex flex-col items-center justify-center text-center hover:border-primary transition-colors cursor-pointer block">
+<div class="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center text-primary mb-6">
+<span class="material-symbols-outlined text-5xl">cloud_upload</span>
+</div>
+<h4 class="text-lg font-bold mb-2">Click to choose your file</h4>
+<p class="text-slate-500 text-sm mb-2 max-w-sm">Support for DICOM, JPEG, PNG, PDF formats. Maximum file size: 500MB.</p>
+<span id="file-name" class="text-xs font-semibold text-primary"></span>
+<input id="id_uploaded_file" name="uploaded_file" class="hidden" type="file" accept=".dcm,.dicom,.pdf,.jpg,.jpeg,.png" required>
+</label>
+{% if form.uploaded_file.errors %}
+<div class="mt-2 text-sm text-rose-600">{{ form.uploaded_file.errors }}</div>
+{% endif %}
+<div class="mt-4 flex items-center justify-between px-2">
+<div class="flex items-center gap-2 text-xs text-slate-400">
+<span class="material-symbols-outlined text-sm text-primary">verified_user</span>
+                                HIPAA-compliant secure end-to-end encrypted upload
+                            </div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-[10px] font-bold text-slate-500 uppercase">AES-256</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-[10px] font-bold text-slate-500 uppercase">SSL SECURE</span>
+</div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="flex items-center gap-3 mb-6">
+<span class="w-8 h-8 rounded-full bg-primary text-slate-900 flex items-center justify-center font-bold text-sm">3</span>
+<h3 class="text-xl font-bold">Add Notes & Symptoms</h3>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-6 shadow-sm">
+<label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Provide clinical context for the AI analysis</label>
+<textarea name="context_notes" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-primary/50 min-h-[120px] text-slate-900 dark:text-white" placeholder="Describe your symptoms, pain levels, or specific areas of concern..."></textarea>
+</div>
+</section>
+
+<section class="pt-6 border-t border-slate-200 dark:border-slate-800">
+<div class="flex flex-col md:flex-row items-center justify-between gap-6">
+<div>
+<p class="text-xs font-bold text-slate-900 dark:text-white">Privacy Protected</p>
+<p class="text-[10px] text-slate-500">Your data is encrypted during transfer and processing.</p>
+</div>
+<div class="flex items-center gap-3">
+<a href="{% url 'patient_medical_records' %}" class="px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-bold rounded-xl">Cancel</a>
+<button type="submit" class="px-10 py-4 bg-primary text-slate-900 rounded-xl font-black text-lg flex items-center justify-center gap-3 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-[1.02] active:scale-[0.98]">
+<span class="material-symbols-outlined">auto_awesome</span>
+                                Submit for AI Analysis
+                            </button>
+</div>
+</div>
+</section>
+
+</form>
+</div>
+</main>
+</div>
+
+<script>
+const fileInput = document.getElementById('id_uploaded_file');
+const fileName = document.getElementById('file-name');
+if (fileInput && fileName) {
+  fileInput.addEventListener('change', function () {
+    fileName.textContent = this.files && this.files.length ? this.files[0].name : '';
+  });
+}
+</script>
+</body></html>

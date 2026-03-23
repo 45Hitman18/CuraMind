@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CuraMind AI - Reports</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df280",
+                        "background-light": "#f5f8f7",
+                        "background-dark": "#102219",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar-item-active { background-color: rgba(13, 242, 128, 0.15); border-left: 4px solid #0df280; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0">
+<a href="{% url 'landing_page' %}" class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-slate-900">
+<span class="material-symbols-outlined text-2xl font-bold">psychiatry</span>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-none tracking-tight">CuraMind AI</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Radiology Suite</p>
+</div>
+</a>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_dashboard' %}">
+<span class="material-symbols-outlined">groups</span>
+<span class="text-sm font-medium">Patient Queue</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_appointments' %}">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-sm font-medium">View Appointments</span>
+{% if pending_appointments_count %}
+<span class="ml-auto bg-primary/20 text-slate-800 dark:text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">{{ pending_appointments_count }}</span>
+{% endif %}
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_reviews' %}">
+<span class="material-symbols-outlined">description</span>
+<span class="text-sm font-medium">My Reviews</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_messages' %}">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-sm font-medium">Messages</span>
+{% if unread_doctor_messages_count %}
+<span class="ml-auto bg-primary/20 text-slate-800 dark:text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">{{ unread_doctor_messages_count }}</span>
+{% endif %}
+</a>
+<a class="sidebar-item-active flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-900 dark:text-white group" href="{% url 'doctor_reports' %}">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<span class="text-sm font-semibold">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_profile' %}">
+<span class="material-symbols-outlined">person</span>
+<span class="text-sm font-medium">Profile</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="{% url 'doctor_feedback' %}">
+<span class="material-symbols-outlined">star</span>
+<span class="text-sm font-medium">Patient Feedback</span>
+</a>
+<form method="post" action="{% url 'logout' %}">
+{% csrf_token %}
+<button class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" type="submit">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</button>
+</form>
+</nav>
+<div class="p-4 mt-auto">
+<div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-100 dark:border-slate-700">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-sm">verified_user</span>
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">HIPAA Compliant</span>
+</div>
+<p class="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">Your session is encrypted and secure under healthcare data standards.</p>
+</div>
+<div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div class="min-w-0">
+<p class="text-sm font-semibold truncate">Dr. {{ request.user.get_full_name|default:request.user.username }}</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ doctor_specialization }}</p>
+</div>
+</div>
+</div>
+</aside>
+
+<main class="flex-1 flex flex-col overflow-hidden">
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-8 flex items-center justify-between">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">monitoring</span>
+<h2 class="text-lg font-bold tracking-tight">Analytics Command Center</h2>
+</div>
+<div class="h-6 w-px bg-slate-200 dark:bg-slate-800"></div>
+<div class="flex gap-2">
+<a href="{% url 'doctor_reports' %}?period=24h" class="px-3 py-1.5 rounded-lg text-xs font-semibold {% if period == '24h' %}bg-primary/20 text-primary border border-primary/30{% else %}bg-slate-100 dark:bg-slate-800 hover:bg-primary/10{% endif %}">Last 24h</a>
+<a href="{% url 'doctor_reports' %}?period=30d" class="px-3 py-1.5 rounded-lg text-xs font-semibold {% if period == '30d' %}bg-primary/20 text-primary border border-primary/30{% else %}bg-slate-100 dark:bg-slate-800 hover:bg-primary/10{% endif %}">Last 30 Days</a>
+<a href="{% url 'doctor_reports' %}?period=7d" class="px-3 py-1.5 rounded-lg text-xs font-semibold {% if period == '7d' %}bg-primary/20 text-primary border border-primary/30{% else %}bg-slate-100 dark:bg-slate-800 hover:bg-primary/10{% endif %}">Last 7 Days</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="pl-9 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm w-64 focus:ring-1 focus:ring-primary" placeholder="Search analytics..." type="text"/>
+</div>
+<button class="p-2 text-slate-500 hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700 border border-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">person</span>
+</div>
+</div>
+</header>
+
+<div class="flex-1 overflow-y-auto p-8 space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+<div>
+<p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">System-Wide Throughput</p>
+<div class="flex items-baseline gap-2 mt-2">
+<h3 class="text-3xl font-bold">{{ total_records_processed }}</h3>
+<span class="text-primary text-sm font-bold flex items-center"><span class="material-symbols-outlined text-xs">trending_up</span> {{ throughput_growth }}%</span>
+</div>
+</div>
+<div class="mt-4 h-16 w-full relative">
+<svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 30">
+<path d="M0 24 Q 12 19, 24 21 T 48 14 T 72 10 T 100 8" fill="none" stroke="#0df280" stroke-width="2"></path>
+<path d="M0 24 Q 12 19, 24 21 T 48 14 T 72 10 T 100 8 L 100 30 L 0 30 Z" fill="rgba(13,242,128,0.15)"></path>
+</svg>
+</div>
+</div>
+
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between">
+<div>
+<p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">AI Confidence Score</p>
+<h3 class="text-3xl font-bold mt-2">{{ ai_confidence_score }}%</h3>
+<p class="text-xs text-slate-500 mt-1">Global aggregation across assigned records</p>
+</div>
+<div class="relative size-20">
+<svg class="size-full" viewBox="0 0 36 36">
+<circle class="stroke-slate-100 dark:stroke-slate-800" cx="18" cy="18" fill="none" r="16" stroke-width="3"></circle>
+<circle class="stroke-primary" cx="18" cy="18" fill="none" r="16" stroke-dasharray="{{ ai_confidence_score }}, 100" stroke-linecap="round" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xl">verified</span>
+</div>
+</div>
+</div>
+
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between">
+<div>
+<p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Appointments Handled</p>
+<h3 class="text-3xl font-bold mt-2">{{ appointments_handled }}</h3>
+<div class="flex items-center gap-3 mt-2 text-xs text-slate-500">
+<span>Approved: {{ approved_count }}</span>
+<span>Pending: {{ pending_count }}</span>
+<span>Rejected: {{ rejected_count }}</span>
+</div>
+</div>
+<div class="bg-primary/10 p-3 rounded-full">
+<span class="material-symbols-outlined text-primary text-3xl">calendar_today</span>
+</div>
+</div>
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+<div class="xl:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h4 class="text-lg font-bold">Accuracy Trend Analysis</h4>
+<p class="text-sm text-slate-500">Real-time activity from your reviews and appointments.</p>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-primary"></div>
+<span class="text-xs font-medium">Reviews</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-slate-400"></div>
+<span class="text-xs font-medium">Appointments</span>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+{% for point in trend_data %}
+<div>
+<div class="flex items-center justify-between text-xs mb-1">
+<span class="font-semibold text-slate-600 dark:text-slate-300">{{ point.label }}</span>
+<span class="text-slate-500">Total: {{ point.total }}</span>
+</div>
+{% if max_trend_total %}
+<progress class="w-full h-2 rounded-full overflow-hidden mb-2 [&::-webkit-progress-bar]:bg-slate-100 [&::-webkit-progress-value]:bg-primary [&::-moz-progress-bar]:bg-primary" max="100" value="{% widthratio point.total max_trend_total 100 %}"></progress>
+{% else %}
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden mb-2"></div>
+{% endif %}
+<div class="grid grid-cols-2 gap-2 text-[11px] text-slate-500">
+<div class="rounded bg-slate-50 dark:bg-slate-800/50 px-2 py-1">Reviews: {{ point.reviews }}</div>
+<div class="rounded bg-slate-50 dark:bg-slate-800/50 px-2 py-1">Appointments: {{ point.appointments }}</div>
+</div>
+</div>
+{% empty %}
+<p class="text-sm text-slate-500">No trend data available for selected period.</p>
+{% endfor %}
+</div>
+</div>
+
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
+<div class="flex items-center justify-between mb-4">
+<h4 class="text-sm font-bold uppercase tracking-wider">Recent Audit Events</h4>
+<span class="text-[10px] bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-slate-500">LIVE</span>
+</div>
+<div class="flex-1 space-y-4 overflow-y-auto">
+{% for event in audit_events %}
+<div class="flex gap-3 text-xs leading-relaxed border-l-2 border-primary pl-3 py-1">
+<span class="text-slate-400 font-mono whitespace-nowrap">{{ event.timestamp|date:"H:i:s" }}</span>
+<p class="text-slate-600 dark:text-slate-300"><span class="font-bold">{{ event.action }}</span>{% if event.object_type %} • {{ event.object_type }}{% endif %}{% if event.object_id %} #{{ event.object_id }}{% endif %}</p>
+</div>
+{% empty %}
+<p class="text-sm text-slate-500">No audit events found for selected period.</p>
+{% endfor %}
+</div>
+<a href="{% url 'admin_overview' %}" class="mt-4 text-xs font-bold text-primary hover:underline text-center">View Full Audit Log</a>
+</div>
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+<div class="xl:col-span-2 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h4 class="text-sm font-bold uppercase tracking-wider mb-6">Departmental Processing Efficiency</h4>
+<div class="space-y-5">
+{% for item in department_efficiency %}
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="font-bold">{{ item.name }}</span>
+<span class="text-slate-400">{{ item.count }} scans</span>
+</div>
+<progress class="w-full h-2 rounded-full overflow-hidden [&::-webkit-progress-bar]:bg-slate-100 [&::-webkit-progress-value]:bg-primary [&::-moz-progress-bar]:bg-primary" max="100" value="{{ item.percent }}"></progress>
+</div>
+{% endfor %}
+</div>
+</div>
+
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary text-lg">ecg</span>
+<h4 class="text-sm font-bold uppercase tracking-wider">Real-Time Operational Stats</h4>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-800">
+<p class="text-[10px] text-slate-400 uppercase font-bold">Pending Appointments</p>
+<p class="text-xl font-bold font-mono">{{ pending_count }}</p>
+</div>
+<div class="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-800">
+<p class="text-[10px] text-slate-400 uppercase font-bold">Completed Appointments</p>
+<p class="text-xl font-bold font-mono">{{ completed_appointments_count }}</p>
+</div>
+<div class="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-800">
+<p class="text-[10px] text-slate-400 uppercase font-bold">High Alert Cases</p>
+<p class="text-xl font-bold font-mono">{{ high_cases }}</p>
+</div>
+<div class="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-800">
+<p class="text-[10px] text-slate-400 uppercase font-bold">Review Completion</p>
+<p class="text-xl font-bold font-mono">{{ total_reviews_done }}</p>
+</div>
+</div>
+<div class="mt-6 flex flex-col gap-2 text-xs">
+<div class="flex items-center justify-between">
+<span class="text-slate-500">Current Approved Rate</span>
+<span class="px-1.5 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded">{{ approval_rate }}%</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-slate-500">AI Confidence (live)</span>
+<span class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10px] font-bold rounded">{{ ai_confidence_score }}%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+setTimeout(function () { window.location.reload(); }, 30000);
+</script>
+</body></html>

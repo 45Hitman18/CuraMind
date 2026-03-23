@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Appointments | CuraMind AI Patient Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df280",
+                        "background-light": "#f5f8f7",
+                        "background-dark": "#102219",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .active-nav { background-color: rgba(13, 242, 128, 0.1); border-right: 4px solid #0df280; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="p-6">
+<a href="{% url 'landing_page' %}" class="flex items-center gap-3">
+<div class="bg-primary rounded-lg p-1.5">
+<span class="material-symbols-outlined text-slate-900 text-2xl">neurology</span>
+</div>
+<div>
+<h1 class="text-slate-900 dark:text-white text-lg font-bold leading-none">CuraMind AI</h1>
+<p class="text-xs text-slate-500 font-medium mt-1">Patient Portal</p>
+</div>
+</a>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_dashboard' %}">
+<span class="material-symbols-outlined">dashboard</span>
+                    Home/Dashboard
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_medical_records' %}">
+<span class="material-symbols-outlined">description</span>
+                    My Medical Records
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg active-nav text-slate-900 dark:text-white font-medium" href="{% url 'patient_appointments' %}">
+<span class="material-symbols-outlined">calendar_today</span>
+                    Appointments
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_schedule_appointment' %}">
+<span class="material-symbols-outlined">event_available</span>
+                    Schedule Appointment
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_messages' %}">
+<span class="material-symbols-outlined">chat_bubble</span>
+                    Messages
+                    <span class="ml-auto bg-primary/20 text-slate-800 dark:text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">{{ unread_messages_count }}</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_profile' %}">
+<span class="material-symbols-outlined">person</span>
+                    Profile
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_feedback' %}">
+<span class="material-symbols-outlined">star</span>
+                    Feedback & Rating
+                </a>
+<form method="post" action="{% url 'logout' %}">
+{% csrf_token %}
+<button class="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" type="submit">
+<span class="material-symbols-outlined">logout</span>
+                    Logout
+                </button>
+</form>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<a href="{% url 'upload_scan' %}" class="w-full bg-primary hover:bg-primary/90 text-slate-900 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined">cloud_upload</span>
+                    Upload New Scan
+                </a>
+<div class="mt-4 flex items-center gap-2 justify-center py-2 px-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined text-sm text-primary">verified_user</span>
+<span class="text-[10px] uppercase tracking-wider font-bold text-slate-500">HIPAA Compliant</span>
+</div>
+</div>
+</aside>
+
+<main class="flex-1 flex flex-col overflow-y-auto">
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500">event</span>
+<h2 class="text-slate-900 dark:text-white font-bold text-xl">Appointments</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold text-slate-900 dark:text-white leading-none">{{ request.user.get_full_name }}</p>
+<p class="text-[10px] font-medium text-slate-500 mt-1 uppercase tracking-tight">Patient Account</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+</div>
+</div>
+</header>
+
+<div class="p-8 space-y-8">
+<div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+<div>
+<h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">My Appointments</h1>
+<p class="text-slate-500 font-medium mt-1">Manage your upcoming consultations and appointment history.</p>
+</div>
+<div class="flex items-center gap-3">
+<span class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm font-semibold">
+<span class="material-symbols-outlined text-primary text-base">upcoming</span>
+{{ upcoming_patient_appointments|length }} Upcoming
+</span>
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Next Appointment</p>
+{% if upcoming_appointment %}
+<p class="text-slate-900 dark:text-white font-bold text-lg">{{ upcoming_appointment.datetime|date:"M d, Y" }}</p>
+<p class="text-sm text-slate-500 mt-1">{{ upcoming_appointment.datetime|date:"h:i A" }} • Dr. {{ upcoming_appointment.doctor.get_full_name|default:upcoming_appointment.doctor.username }}</p>
+{% else %}
+<p class="text-slate-900 dark:text-white font-bold text-lg">No upcoming appointment</p>
+<p class="text-sm text-slate-500 mt-1">No scheduled visit available.</p>
+{% endif %}
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Upcoming Count</p>
+<p class="text-slate-900 dark:text-white font-bold text-2xl">{{ upcoming_patient_appointments|length }}</p>
+<p class="text-sm text-slate-500 mt-1">Scheduled future appointments</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Past Count</p>
+<p class="text-slate-900 dark:text-white font-bold text-2xl">{{ past_patient_appointments|length }}</p>
+<p class="text-sm text-slate-500 mt-1">Completed or elapsed appointments</p>
+</div>
+</div>
+
+<section class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="px-8 py-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<div>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Upcoming Appointments</h2>
+<p class="text-sm text-slate-500 mt-1">Your scheduled future consultations.</p>
+</div>
+</div>
+<div class="divide-y divide-slate-100 dark:divide-slate-800">
+{% for appointment in upcoming_patient_appointments %}
+<div class="px-8 py-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Dr. {{ appointment.doctor.get_full_name|default:appointment.doctor.username }}</p>
+<p class="text-sm text-slate-500 mt-1">{{ appointment.datetime|date:"M d, Y • h:i A" }}</p>
+</div>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold {% if appointment.status == 'pending' %}bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400{% elif appointment.status == 'approved' or appointment.status == 'scheduled' %}bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400{% elif appointment.status == 'completed' %}bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400{% else %}bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400{% endif %}">
+{{ appointment.get_status_display }}
+</span>
+</div>
+{% empty %}
+<div class="px-8 py-10 text-center text-slate-500">No upcoming appointments scheduled.</div>
+{% endfor %}
+</div>
+</section>
+
+<section class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="px-8 py-6 border-b border-slate-200 dark:border-slate-800">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Past Appointments</h2>
+<p class="text-sm text-slate-500 mt-1">Review your appointment history.</p>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 text-[10px] uppercase tracking-widest font-bold">
+<tr>
+<th class="px-8 py-4">Date &amp; Time</th>
+<th class="px-8 py-4">Doctor</th>
+<th class="px-8 py-4">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+{% for appointment in past_patient_appointments %}
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-8 py-5 text-sm font-medium text-slate-700 dark:text-slate-300">{{ appointment.datetime|date:"M d, Y • h:i A" }}</td>
+<td class="px-8 py-5 text-sm font-bold text-slate-900 dark:text-white">Dr. {{ appointment.doctor.get_full_name|default:appointment.doctor.username }}</td>
+<td class="px-8 py-5">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold {% if appointment.status == 'completed' %}bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400{% elif appointment.status == 'rejected' or appointment.status == 'cancelled' %}bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400{% elif appointment.status == 'pending' %}bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400{% else %}bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300{% endif %}">
+{{ appointment.get_status_display }}
+</span>
+</td>
+</tr>
+{% empty %}
+<tr>
+<td colspan="3" class="px-8 py-10 text-center text-slate-500">No past appointments yet.</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

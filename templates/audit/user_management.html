@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        primary: "#0df280",
+        "background-light": "#f5f8f7",
+        "background-dark": "#102219",
+      },
+      fontFamily: {
+        display: ["Inter", "sans-serif"],
+      },
+      borderRadius: {
+        DEFAULT: "0.25rem",
+        lg: "0.5rem",
+        xl: "0.75rem",
+        full: "9999px",
+      },
+    },
+  },
+};
+</script>
+<title>CuraMind AI - User Management</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="flex min-h-screen">
+  <aside class="w-72 fixed h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col">
+    <a href="{% url 'landing_page' %}" class="p-6 flex items-center gap-3">
+      <div class="bg-primary rounded-lg p-2 flex items-center justify-center">
+        <svg class="w-5 h-5 text-slate-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3h1v2H8a2 2 0 1 0 0 4h8a2 2 0 1 0 0-4h-2v-2h1a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3H9z"/></svg>
+      </div>
+      <div>
+        <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white leading-none">CuraMind AI</h1>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-wider font-semibold">Admin Dashboard</p>
+      </div>
+    </a>
+
+    <nav class="flex-1 px-4 py-4 space-y-1">
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="{% url 'admin_overview' %}">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13h8V3H3v10zm10 8h8V11h-8v10zM3 21h8v-6H3v6zm10-10h8V3h-8v8z"/></svg>
+        <span class="text-sm font-medium">Platform Overview</span>
+      </a>
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-slate-900 font-semibold" href="{% url 'admin_user_management' %}">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="text-sm">User Management</span>
+      </a>
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="{% url 'admin_system_logs' %}">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        <span class="text-sm font-medium">System Logs</span>
+      </a>
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="{% url 'admin_settings' %}">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0A1.65 1.65 0 0 0 9.91 3.1V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span class="text-sm font-medium">Settings</span>
+      </a>
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="{% url 'admin_feedback' %}">
+        <svg class="w-5 h-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4-6.2-4.5h7.6z"/></svg>
+        <span class="text-sm font-medium">Patient Feedback</span>
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-slate-200 dark:border-slate-800">
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="w-full flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span class="text-sm font-medium">Logout</span>
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <main class="flex-1 ml-72">
+    <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10 px-8 flex items-center justify-between">
+      <h2 class="text-lg font-bold">User Management</h2>
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="text-right min-w-0">
+          <p class="text-sm font-bold leading-none truncate">{{ request.user.get_full_name|default:request.user.username }}</p>
+          <p class="text-xs text-slate-500 mt-1 truncate">{{ request.user.role|title }}</p>
+        </div>
+        <div class="size-9 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 9.5-8 10-4.5-.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+      </div>
+    </header>
+
+    <div class="p-8 space-y-8 bg-slate-50 dark:bg-slate-950 min-h-[calc(100vh-64px)]">
+      {% if messages %}
+      <div class="space-y-2">
+        {% for message in messages %}
+        <div class="rounded-lg border px-4 py-3 text-sm {% if message.tags == 'error' %}border-rose-200 bg-rose-50 text-rose-700{% else %}border-emerald-200 bg-emerald-50 text-emerald-700{% endif %}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">User Management</h2>
+          <p class="text-slate-500 mt-1">Manage system access for doctors, patients, and staff administrators.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-slate-500 text-sm font-medium">Total Users</p>
+          <div class="flex items-end justify-between mt-2">
+            <p class="text-2xl font-bold text-slate-900 dark:text-white">{{ total_users }}</p>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-slate-500 text-sm font-medium">Active Doctors</p>
+          <div class="flex items-end justify-between mt-2">
+            <p class="text-2xl font-bold text-slate-900 dark:text-white">{{ doctors_count }}</p>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-slate-500 text-sm font-medium">Active Patients</p>
+          <div class="flex items-end justify-between mt-2">
+            <p class="text-2xl font-bold text-slate-900 dark:text-white">{{ patients_count }}</p>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-slate-500 text-sm font-medium">Pending Requests</p>
+          <div class="flex items-end justify-between mt-2">
+            <p class="text-2xl font-bold text-slate-900 dark:text-white">{{ pending_requests }}</p>
+            <span class="text-amber-500 text-sm font-bold bg-amber-500/10 px-2 py-0.5 rounded">Action Needed</span>
+          </div>
+        </div>
+      </div>
+
+      <form method="get" class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row gap-4">
+        <div class="flex-1 relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </span>
+          <input name="q" value="{{ query }}" class="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary/50" placeholder="Search users by name, email, or username..." type="text"/>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <div class="relative">
+            <select name="role" class="appearance-none min-w-[140px] h-10 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm pl-4 pr-10 focus:ring-2 focus:ring-primary/50 text-slate-700 dark:text-slate-300">
+              <option value="all" {% if role_filter == 'all' %}selected{% endif %}>All Roles</option>
+              <option value="doctor" {% if role_filter == 'doctor' %}selected{% endif %}>Doctor</option>
+              <option value="patient" {% if role_filter == 'patient' %}selected{% endif %}>Patient</option>
+              <option value="admin" {% if role_filter == 'admin' %}selected{% endif %}>Admin</option>
+            </select>
+            <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </div>
+          <div class="relative">
+            <select name="status" class="appearance-none min-w-[150px] h-10 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm pl-4 pr-10 focus:ring-2 focus:ring-primary/50 text-slate-700 dark:text-slate-300">
+              <option value="all" {% if status_filter == 'all' %}selected{% endif %}>All Statuses</option>
+              <option value="active" {% if status_filter == 'active' %}selected{% endif %}>Active</option>
+              <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+              <option value="suspended" {% if status_filter == 'suspended' %}selected{% endif %}>Suspended</option>
+            </select>
+            <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </div>
+          <button type="submit" class="flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800">
+            Apply
+          </button>
+        </div>
+      </form>
+
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Name</th>
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Role</th>
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Specialty / Dept</th>
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Last Active</th>
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+              {% for user in users %}
+              <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <div class="size-9 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 font-bold text-xs">{{ user.initials }}</div>
+                    <div>
+                      <p class="text-sm font-bold text-slate-900 dark:text-white">{{ user.full_name }}</p>
+                      <p class="text-xs text-slate-500">{{ user.email }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  {% if user.role == 'doctor' %}
+                  <span class="px-2 py-1 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-[10px] font-bold uppercase">Doctor</span>
+                  {% elif user.role == 'patient' %}
+                  <span class="px-2 py-1 rounded bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold uppercase">Patient</span>
+                  {% else %}
+                  <span class="px-2 py-1 rounded bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 text-[10px] font-bold uppercase">Admin</span>
+                  {% endif %}
+                </td>
+                <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{{ user.detail }}</td>
+                <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{% if user.last_login %}{{ user.last_login|timesince }} ago{% else %}Never{% endif %}</td>
+                <td class="px-6 py-4">
+                  {% if user.status == 'active' %}
+                  <div class="flex items-center gap-1.5 text-primary"><span class="size-2 rounded-full bg-primary"></span><span class="text-xs font-bold">Active</span></div>
+                  {% elif user.status == 'pending' %}
+                  <div class="flex items-center gap-1.5 text-amber-500"><span class="size-2 rounded-full bg-amber-500"></span><span class="text-xs font-bold">Pending</span></div>
+                  {% else %}
+                  <div class="flex items-center gap-1.5 text-slate-400"><span class="size-2 rounded-full bg-slate-400"></span><span class="text-xs font-bold">Suspended</span></div>
+                  {% endif %}
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <div class="flex justify-end gap-2">
+                    <form method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="action" value="toggle_block"/>
+                      <input type="hidden" name="user_id" value="{{ user.id }}"/>
+                      <input type="hidden" name="return_query" value="{{ request.GET.urlencode }}"/>
+                      {% if user.is_active %}
+                      <button class="p-1.5 text-slate-400 hover:text-red-500 transition-colors" title="Block User" type="submit">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                      </button>
+                      {% else %}
+                      <button class="p-1.5 text-primary hover:brightness-90 transition-colors" title="Unblock User" type="submit">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+                      </button>
+                      {% endif %}
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="6" class="px-6 py-10 text-center text-slate-500">No users found for selected filters.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <p class="text-xs text-slate-500">Showing <span class="font-bold">{{ page_obj.start_index }}</span> to <span class="font-bold">{{ page_obj.end_index }}</span> of <span class="font-bold">{{ page_obj.paginator.count }}</span> users</p>
+          <div class="flex gap-1">
+            {% if page_obj.has_previous %}
+            <a href="?q={{ query|urlencode }}&role={{ role_filter }}&status={{ status_filter }}&page={{ page_obj.previous_page_number }}" class="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            </a>
+            {% else %}
+            <button class="p-2 rounded text-slate-300" disabled>
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            {% endif %}
+
+            <span class="px-3 py-2 text-xs font-bold rounded bg-primary text-slate-900">{{ page_obj.number }}</span>
+
+            {% if page_obj.has_next %}
+            <a href="?q={{ query|urlencode }}&role={{ role_filter }}&status={{ status_filter }}&page={{ page_obj.next_page_number }}" class="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+            {% else %}
+            <button class="p-2 rounded text-slate-300" disabled>
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 bg-slate-100/50 dark:bg-slate-900/50 p-4 rounded-lg border border-slate-200 dark:border-slate-800">
+        <span class="text-slate-400">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        </span>
+        <p class="text-xs text-slate-500">
+          <strong>HIPAA Compliance Notice:</strong> Only manually registered users are listed (demo/test accounts are excluded). All block/unblock actions are audited.
+        </p>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

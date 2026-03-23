@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df280",
+                        "background-light": "#f5f8f7",
+                        "background-dark": "#102219",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Register | CuraMind AI</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-primary/10 px-6 py-4 md:px-20 lg:px-40 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+<a href="{% url 'landing_page' %}" class="flex items-center gap-3">
+<div class="size-8 text-primary">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 6H42L36 24L42 42H6L12 24L6 6Z"></path>
+</svg>
+</div>
+<h2 class="text-slate-900 text-xl font-bold leading-tight tracking-tight">CuraMind AI</h2>
+</a>
+<a href="{% url 'login' %}" class="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary text-slate-900 text-sm font-bold transition-all hover:bg-primary/90">
+                    Login
+                </a>
+</header>
+<main class="flex-1 flex items-center justify-center p-4 md:p-8">
+<div class="max-w-[1000px] w-full grid grid-cols-1 lg:grid-cols-2 bg-white rounded-xl shadow-2xl overflow-hidden border border-primary/5">
+<div class="hidden lg:block relative min-h-[650px] bg-slate-900">
+<div class="absolute inset-0 bg-cover bg-center opacity-60" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDcSr0nBa0l1D8ERmfcE9ZDYWV2Tzd2C6q-ww6QZ_5-AaYnKJQHvNKNdwBBCe0bxXvvYpZR2yhfen33rc5IALSszHy22NKd2wtB8ofMH3Hn3c6QjSoUt7UTTYFaXbtTG19pIvFdBfh3LekVJSooB9qbzsj4dGr8SM7sLCcWGSEvIGi2HRNpmR3Vm2vKTsvZHBWlXwK_kfqK5QlEI2dRiL3iCiDvtqA2F0jHRnHhuxQvFhmTdFUXzIhjUKCIlDqdn-coVS4zItW01g");'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/40 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-12 space-y-4">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-xs font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm">person_add</span>
+                            Secure Registration
+                        </div>
+<h1 class="text-4xl font-bold text-white leading-tight">Join the Clinical AI Platform</h1>
+<p class="text-slate-300 text-lg">Create your account and choose your access role for secure diagnostics workflows.</p>
+</div>
+</div>
+<div class="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+<div class="mb-8">
+<h3 class="text-3xl font-bold text-slate-900 mb-2">Create Account</h3>
+<p class="text-slate-500">Register with your details and select your role.</p>
+</div>
+{% if form.errors %}
+<div class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    Please correct the errors below.
+</div>
+{% endif %}
+<form class="space-y-5" method="post">
+{% csrf_token %}
+<div class="space-y-2">
+<label class="text-sm font-semibold text-slate-700 ml-1" for="id_username">Username</label>
+<input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-slate-900" id="id_username" name="username" value="{{ form.username.value|default:'' }}" required type="text"/>
+{{ form.username.errors }}
+</div>
+<div class="space-y-2">
+<label class="text-sm font-semibold text-slate-700 ml-1" for="id_email">Email</label>
+<input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-slate-900" id="id_email" name="email" value="{{ form.email.value|default:'' }}" required type="email"/>
+{{ form.email.errors }}
+</div>
+<div class="space-y-2">
+<label class="text-sm font-semibold text-slate-700 ml-1" for="id_role">Role</label>
+<select class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-slate-900" id="id_role" name="role" required>
+    {% for value, label in form.fields.role.choices %}
+    <option value="{{ value }}" {% if form.role.value == value %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+</select>
+{{ form.role.errors }}
+</div>
+<div class="space-y-2">
+<label class="text-sm font-semibold text-slate-700 ml-1" for="id_password1">Password</label>
+<input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-slate-900" id="id_password1" name="password1" required type="password"/>
+{{ form.password1.errors }}
+</div>
+<div class="space-y-2">
+<label class="text-sm font-semibold text-slate-700 ml-1" for="id_password2">Confirm Password</label>
+<input class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-slate-900" id="id_password2" name="password2" required type="password"/>
+{{ form.password2.errors }}
+</div>
+<button class="w-full py-4 bg-primary text-slate-900 font-bold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all active:scale-[0.98]" type="submit">
+                            Create Account
+                        </button>
+</form>
+<div class="mt-8 pt-6 border-t border-slate-100 text-center">
+<p class="text-slate-500">Already have an account?
+                            <a class="text-primary font-bold hover:underline" href="{% url 'login' %}">Sign in</a>
+</p>
+</div>
+</div>
+</div>
+</main>
+<footer class="p-8 text-center text-slate-400 text-sm">
+<p>© 2024 CuraMind AI Health Systems. All rights reserved. Professional use only.</p>
+</footer>
+</div>
+</body></html>

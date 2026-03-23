@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CuraMind AI - HIPAA-Compliant AI Diagnostics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df280",
+                        "background-light": "#f5f8f7",
+                        "background-dark": "#102219",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+<nav class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="container mx-auto px-4 h-16 flex items-center justify-between">
+<a href="{% url 'landing_page' %}" class="flex items-center gap-2">
+<div class="text-primary flex size-8 items-center justify-center">
+<span class="material-symbols-outlined text-3xl">medical_services</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight">CuraMind AI</h2>
+</a>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#features">Features</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#how-it-works">How it Works</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#security">Security</a>
+</div>
+<div class="flex items-center gap-3">
+<a href="{% url 'login' %}" class="px-4 py-2 text-sm font-bold hover:text-primary transition-colors">Login</a>
+<a href="{% url 'register' %}" class="bg-primary text-background-dark px-5 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-opacity">Register</a>
+</div>
+</div>
+</nav>
+<section class="relative overflow-hidden pt-8 pb-10 md:pt-12 md:pb-12">
+<div class="container mx-auto px-4">
+<div class="flex flex-col lg:flex-row lg:items-start gap-8 lg:gap-6 max-w-6xl mx-auto">
+<div class="flex-1 text-left space-y-7">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+                        HIPAA-Compliant Technology
+                    </div>
+<h1 class="text-5xl md:text-7xl font-black leading-[1.05] tracking-tight text-slate-900 dark:text-slate-50">
+                        AI-Driven <span class="text-primary">Diagnostic</span> Acceleration
+                    </h1>
+<p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
+                        Secure, cloud-native MRI and X-ray analysis powered by advanced machine learning. Supporting radiologists with clinical-grade precision and millisecond response times.
+                    </p>
+<div class="flex flex-wrap gap-4 pt-4">
+<a href="{% url 'register' %}" class="bg-primary text-background-dark px-9 py-4 md:py-5 rounded-xl text-lg font-bold flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                            Get Started <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+<button class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-9 py-4 md:py-5 rounded-xl text-lg font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+                            Request Demo
+                        </button>
+</div>
+</div>
+<div class="flex-1 w-full max-w-3xl">
+<div class="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800">
+<div class="aspect-[4/3] md:aspect-[16/10] bg-slate-100 dark:bg-slate-900 bg-center bg-cover" data-alt="Doctor reviewing digital medical MRI scans on high-res screen" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuANM0GrVtBAFSeFR1_KhtF2vMk1VDPC2V3aDX9cSyB-Y8u7-9aGCjjxp9XV5L6F8HzazsuW3MAfGmjEjh4mSx6CIJAjnknALLg7v8dSqvJBi-X7repnho9pmqud5VNqMbRiA2taotl8mrrSXeerNFhFVOC-9J6a_gUr8B3-kmd169Qox8Q-Iyb0aPS55LWchS9P-lO1T6dxElfl4KuXB59tqQVQIbYORgDjqaALYSZYQsC1Z6OlwuBhHXs5Vaz29cXG7DK980JEPQ');">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/40 to-transparent"></div>
+<div class="absolute bottom-5 left-5 right-5 bg-white/90 dark:bg-slate-900/90 backdrop-blur p-5 rounded-xl flex items-center gap-4">
+<div class="bg-primary/20 p-2.5 rounded-lg text-primary">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<div>
+<p class="text-sm font-bold uppercase text-slate-500">Live Analysis</p>
+<p class="text-base font-semibold">99.8% Anomaly Detection Accuracy</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-20 bg-white dark:bg-slate-900/50" id="features">
+<div class="container mx-auto px-4">
+<div class="max-w-3xl mb-16">
+<h2 class="text-3xl md:text-4xl font-bold mb-4">Enterprise-Grade Healthcare AI</h2>
+<p class="text-slate-600 dark:text-slate-400 text-lg">Built for clinical precision, scalability, and absolute regulatory compliance.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="p-8 rounded-2xl bg-background-light dark:bg-background-dark border border-slate-200 dark:border-slate-800 group hover:border-primary/50 transition-all">
+<div class="text-primary mb-6 transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-4xl">folder_managed</span>
+</div>
+<h3 class="text-xl font-bold mb-3">DICOM Processing</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                        High-performance pydicom-powered image analysis specifically tuned for radiologist workflows and high-fidelity imaging.
+                    </p>
+</div>
+<div class="p-8 rounded-2xl bg-background-light dark:bg-background-dark border border-slate-200 dark:border-slate-800 group hover:border-primary/50 transition-all">
+<div class="text-primary mb-6 transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-4xl">encrypted</span>
+</div>
+<h3 class="text-xl font-bold mb-3">HIPAA EMR Storage</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                        AES-256 encryption at rest and TLS 1.3 in transit. Fully compliant electronic medical record storage for patient privacy.
+                    </p>
+</div>
+<div class="p-8 rounded-2xl bg-background-light dark:bg-background-dark border border-slate-200 dark:border-slate-800 group hover:border-primary/50 transition-all">
+<div class="text-primary mb-6 transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-4xl">key</span>
+</div>
+<h3 class="text-xl font-bold mb-3">RBAC Access</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                        Granular role-based access control ensures only authorized personnel can view sensitive diagnostic data.
+                    </p>
+</div>
+<div class="p-8 rounded-2xl bg-background-light dark:bg-background-dark border border-slate-200 dark:border-slate-800 group hover:border-primary/50 transition-all">
+<div class="text-primary mb-6 transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-4xl">history_edu</span>
+</div>
+<h3 class="text-xl font-bold mb-3">Audit Logging</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                        Real-time, immutable audit logs tracking every view, edit, and diagnostic action for complete accountability.
+                    </p>
+</div>
+</div>
+</div>
+</section>
+<section class="py-20" id="how-it-works">
+<div class="container mx-auto px-4">
+<div class="text-center mb-16">
+<h2 class="text-3xl md:text-4xl font-bold mb-4">Streamlined Diagnostic Workflow</h2>
+<p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">Our AI integrates seamlessly into existing hospital infrastructures, augmenting the speed of clinical review.</p>
+</div>
+<div class="relative">
+<div class="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-slate-200 dark:bg-slate-800 -translate-y-1/2 z-0"></div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-12 relative z-10">
+<div class="flex flex-col items-center text-center">
+<div class="size-16 rounded-full bg-primary flex items-center justify-center text-background-dark font-bold text-2xl mb-6 shadow-lg shadow-primary/20">1</div>
+<h4 class="text-xl font-bold mb-2">Upload</h4>
+<p class="text-slate-600 dark:text-slate-400 text-sm px-4">Secure patient DICOM images are uploaded to our encrypted cloud gateway.</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<div class="size-16 rounded-full bg-primary flex items-center justify-center text-background-dark font-bold text-2xl mb-6 shadow-lg shadow-primary/20">2</div>
+<h4 class="text-xl font-bold mb-2">AI Pre-Process</h4>
+<p class="text-slate-600 dark:text-slate-400 text-sm px-4">Advanced neural networks identify potential anomalies and highlight areas of concern.</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<div class="size-16 rounded-full bg-primary flex items-center justify-center text-background-dark font-bold text-2xl mb-6 shadow-lg shadow-primary/20">3</div>
+<h4 class="text-xl font-bold mb-2">Final Review</h4>
+<p class="text-slate-600 dark:text-slate-400 text-sm px-4">A certified radiologist performs a formal review with AI-assisted annotations.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-20 bg-background-dark text-slate-100 overflow-hidden relative" id="security">
+<div class="absolute inset-0 opacity-10">
+<div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,_var(--tw-gradient-stops))] from-primary/40 via-transparent to-transparent"></div>
+</div>
+<div class="container mx-auto px-4 relative z-10">
+<div class="flex flex-col lg:flex-row items-center gap-16">
+<div class="flex-1 space-y-8">
+<h2 class="text-3xl md:text-5xl font-bold tracking-tight">Security is our <span class="text-primary">DNA</span>.</h2>
+<p class="text-slate-400 text-lg">
+                        CuraMind AI is engineered to meet the highest global standards for healthcare data security. We don't just comply; we innovate in privacy.
+                    </p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary">verified</span>
+<div>
+<h5 class="font-bold">HIPAA Compliant</h5>
+<p class="text-sm text-slate-500">Full Business Associate Agreement support.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary">policy</span>
+<div>
+<h5 class="font-bold">GDPR Ready</h5>
+<p class="text-sm text-slate-500">Global data protection standards applied.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary">lock</span>
+<div>
+<h5 class="font-bold">Encryption at Rest</h5>
+<p class="text-sm text-slate-500">Military-grade AES-256 encryption.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary">lan</span>
+<div>
+<h5 class="font-bold">Isolated VPC</h5>
+<p class="text-sm text-slate-500">Dedicated network silos for every clinic.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex-1 w-full flex justify-center">
+<div class="grid grid-cols-2 gap-4">
+<div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl bg-slate-800 border border-slate-700 flex flex-col items-center justify-center p-4 text-center">
+<img alt="HIPAA Badge" data-alt="Official HIPAA Compliance Badge Icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6m2_hViRcSxOStQEe55pdA_2r14F2NIzQ3Trwd6ztt_qWrX1dmfhuVTDSV9-Jcq3lwQM-vWHIv1A4ycZr4HWJvmCbDL_OcQOJYhxvSsnb7zFnTPaE_nSGn_8NCnXsrqP0kEZ-pON5spetYcHeoBUDGFqAKfN7HhgeYmEtt_BN9sogmAx6iXbDPygqVFcXG0sZ3csdULKI3iZTsGG5xmghQWKK2KI7QNXqysCeaPQ2XHxa4_jYPH5FVGpXARLmieQElDUbI9eBeA"/>
+<span class="text-[10px] mt-2 font-bold opacity-60">HIPAA CERTIFIED</span>
+</div>
+<div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl bg-slate-800 border border-slate-700 flex flex-col items-center justify-center p-4 text-center">
+<img alt="GDPR Badge" data-alt="European GDPR Data Protection Badge" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLMUWrLR7qOhYLXI_7T6s9CUjeDwpEbi7eXHz2Z_3TRn_917POCASrukoFjEBp5qjx2vir4NF2eXlv_DrcLp-ugDpnKaaE8jlwsU1Wtpa4w9YllEVu_ZX0fqD57-FZFzcxj0AudeyGpzdjLwP-dHcxyeadAqr3iUA424Tmk0lupZmdvm6M_ZM7WcIrEYU0MgEpK7ZkWAmcz1spBBTt02xsCTx9fCYNugbkBaRF4mlNzcgQnCP9tYHWiVpN-lk3ZhEy46HQYRvVZw"/>
+<span class="text-[10px] mt-2 font-bold opacity-60">GDPR COMPLIANT</span>
+</div>
+<div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl bg-slate-800 border border-slate-700 flex flex-col items-center justify-center p-4 text-center">
+<img alt="SOC2 Badge" data-alt="SOC2 Security Type 2 Badge" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXASI8sIqBigFpIFTkoNWSCKOp12rkfd1BQufEJxcze6LlT47bvSWYfqxDH-FrJdhWAbVTHDcIrnzK4aFfi2-DeGZNEKGheBkHbh7lgjQEgacAE5ILu2uQqssIsLZRxCUCermC_Hg8chsnPoFtSE44zP5DqgeoozTnx0rowH_HUGPfoPcTrvIv7nTOOdQBhkJouzMxnp9mSOdlp783SjkVsRypaQh5N6pV01l7Mr8-NPY6uJwzQxmGjhj4tbcqlk48VVk306IEMw"/>
+<span class="text-[10px] mt-2 font-bold opacity-60">SOC2 TYPE II</span>
+</div>
+<div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl bg-slate-800 border border-slate-700 flex flex-col items-center justify-center p-4 text-center">
+<img alt="ISO Badge" data-alt="ISO 27001 Security Management Badge" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD71ww1fUfTQo8LTs6Rhfn9GlM0EG_pq8WkdQW4xh0w9y7jJmqOsazBa1x6V5e8F0hydLNd4mp0lKSmb0FfYAPEaBaN9CFQFo3aAnRhou3_47VC1LWrcVB_Z4uBTdOvrPsiZxEUH8Yj3RE53Ta3zJgPmBkoEmOD9EoQSejx5VpdfB5UYuXMEC9bm98Wyta4vLgrlt1Bi_LGFPl3t65cvlPca8NtQE2A5LqiUoCsPBAFEpNBFBpPYmnigDYRMsum-r_4edhNQLmkaQ"/>
+<span class="text-[10px] mt-2 font-bold opacity-60">ISO 27001</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<footer class="bg-white dark:bg-background-dark py-12 border-t border-slate-200 dark:border-slate-800">
+<div class="container mx-auto px-4">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-2 mb-6">
+<div class="text-primary flex size-6 items-center justify-center">
+<span class="material-symbols-outlined text-2xl">medical_services</span>
+</div>
+<h2 class="text-lg font-bold">CuraMind AI</h2>
+</div>
+<p class="text-slate-500 text-sm leading-relaxed">
+                        Redefining diagnostic radiology through ethical AI and clinical precision.
+                    </p>
+</div>
+<div>
+<h5 class="font-bold mb-6">Platform</h5>
+<ul class="space-y-4 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">AI Diagnostics</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Telehealth Tools</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">DICOM Viewer</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Security Overview</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-6">Company</h5>
+<ul class="space-y-4 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Press Kit</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-6">Support</h5>
+<ul class="space-y-4 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">Help Center</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">API Docs</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">System Status</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+</ul>
+</div>
+</div>
+<div class="pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-slate-400">© 2024 CuraMind AI Inc. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="text-slate-400 hover:text-primary" href="#"><span class="material-symbols-outlined text-xl">share</span></a>
+<a class="text-slate-400 hover:text-primary" href="#"><span class="material-symbols-outlined text-xl">mail</span></a>
+<a class="text-slate-400 hover:text-primary" href="#"><span class="material-symbols-outlined text-xl">public</span></a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        primary: "#0df280",
+        "background-light": "#f5f8f7",
+        "background-dark": "#102219",
+      },
+      fontFamily: {
+        display: ["Inter", "sans-serif"],
+      },
+      borderRadius: {
+        DEFAULT: "0.25rem",
+        lg: "0.5rem",
+        xl: "0.75rem",
+        full: "9999px",
+      },
+    },
+  },
+};
+</script>
+<title>CuraMind AI Admin Dashboard</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="flex min-h-screen">
+  <aside class="w-72 fixed h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col">
+    <a href="{% url 'landing_page' %}" class="p-6 flex items-center gap-3">
+      <div class="bg-primary rounded-lg p-2 flex items-center justify-center">
+        <svg class="w-5 h-5 text-slate-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3h1v2H8a2 2 0 1 0 0 4h8a2 2 0 1 0 0-4h-2v-2h1a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3H9z"/></svg>
+      </div>
+      <div>
+        <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white leading-none">CuraMind AI</h1>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-wider font-semibold">Admin Dashboard</p>
+      </div>
+    </a>
+
+    <nav class="flex-1 px-4 py-4 space-y-1">
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-slate-900 font-semibold" href="{% url 'admin_overview' %}">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13h8V3H3v10zm10 8h8V11h-8v10zM3 21h8v-6H3v6zm10-10h8V3h-8v8z"/></svg>
+        <span class="text-sm">Platform Overview</span>
+      </a>
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="{% url 'admin_user_management' %}">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="text-sm font-medium">User Management</span>
+      </a>
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="{% url 'admin_system_logs' %}">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        <span class="text-sm font-medium">System Logs</span>
+      </a>
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="{% url 'admin_settings' %}">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0A1.65 1.65 0 0 0 9.91 3.1V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span class="text-sm font-medium">Settings</span>
+      </a>
+      <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="{% url 'admin_feedback' %}">
+        <svg class="w-5 h-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4-6.2-4.5h7.6z"/></svg>
+        <span class="text-sm font-medium">Patient Feedback</span>
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-slate-200 dark:border-slate-800">
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="w-full flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span class="text-sm font-medium">Logout</span>
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <main class="flex-1 ml-72">
+    <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10 px-8 flex items-center justify-between">
+      <h2 class="text-lg font-bold">Platform Overview</h2>
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="text-right min-w-0">
+          <p class="text-sm font-bold leading-none truncate">{{ request.user.get_full_name|default:request.user.username }}</p>
+          <p class="text-xs text-slate-500 mt-1 truncate">{{ request.user.role|title }}</p>
+        </div>
+        <div class="size-9 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 9.5-8 10-4.5-.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+      </div>
+    </header>
+
+    <div class="p-8 space-y-8">
+      <section id="stats" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <article class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+          <p class="text-sm text-slate-500">Total Active Patients</p>
+          <p class="text-3xl font-bold mt-2">{{ total_patients }}</p>
+        </article>
+        <article class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+          <p class="text-sm text-slate-500">Specialized Doctors</p>
+          <p class="text-3xl font-bold mt-2">{{ total_doctors }}</p>
+        </article>
+        <article class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+          <p class="text-sm text-slate-500">Scans Processed</p>
+          <p class="text-3xl font-bold mt-2">{{ total_records }}</p>
+        </article>
+        <article class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+          <p class="text-sm text-slate-500">Operational Compliance</p>
+          <p class="text-3xl font-bold mt-2">{{ compliance_rate }}%</p>
+        </article>
+      </section>
+
+      <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="font-bold text-lg">Scan Volume Over Time</h3>
+            <span class="px-3 py-1 text-xs font-bold bg-primary text-slate-900 rounded-full">7D</span>
+          </div>
+          <div class="grid grid-cols-7 gap-3 items-end h-48">
+            {% for value in day_values %}
+              <div class="flex flex-col items-center gap-2 justify-end h-full">
+                <div class="w-full bg-primary/20 rounded-t" style="height: {{ value|add:8 }}px; min-height: 8px;"></div>
+                <span class="text-[10px] text-slate-500 font-semibold">{{ value }}</span>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="grid grid-cols-7 gap-3 mt-3">
+            {% for day in day_labels %}
+              <span class="text-center text-xs text-slate-400 font-bold">{{ day }}</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div id="compliance" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
+          <h3 class="font-bold text-lg">Compliance Status</h3>
+          <div class="rounded-lg bg-slate-50 dark:bg-slate-800/50 p-4">
+            <p class="text-sm font-semibold">HIPAA Compliance</p>
+            <p class="text-2xl font-bold mt-1">{{ compliance_rate }}%</p>
+          </div>
+          <div class="rounded-lg bg-slate-50 dark:bg-slate-800/50 p-4">
+            <p class="text-sm font-semibold">24h Audit Events</p>
+            <p class="text-2xl font-bold mt-1">{{ total_24h_logs }}</p>
+          </div>
+          <div class="rounded-lg bg-slate-50 dark:bg-slate-800/50 p-4">
+            <p class="text-sm font-semibold">Permission Denials (24h)</p>
+            <p class="text-2xl font-bold mt-1">{{ denial_24h_logs }}</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+        <div id="logs" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+          <div class="p-6 border-b border-slate-100 dark:border-slate-800">
+            <h3 class="font-bold text-lg">Recent System Logs</h3>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 text-xs uppercase font-bold tracking-wider">
+                <tr>
+                  <th class="px-6 py-3">Action</th>
+                  <th class="px-6 py-3">User</th>
+                  <th class="px-6 py-3">Timestamp</th>
+                  <th class="px-6 py-3 text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                {% for log in recent_audit_logs %}
+                  <tr class="text-sm hover:bg-slate-50 dark:hover:bg-slate-800/30">
+                    <td class="px-6 py-4 font-medium">{{ log.action }}</td>
+                    <td class="px-6 py-4">{{ log.user.get_full_name|default:log.user.username|default:'System' }}</td>
+                    <td class="px-6 py-4 text-slate-500">{{ log.timestamp|timesince }} ago</td>
+                    <td class="px-6 py-4 text-right">
+                      {% if log.action == 'PERMISSION_DENIED' %}
+                        <span class="inline-block size-2 bg-amber-500 rounded-full mr-2"></span><span class="text-xs font-bold uppercase">High</span>
+                      {% else %}
+                        <span class="inline-block size-2 bg-primary rounded-full mr-2"></span><span class="text-xs font-bold uppercase">Success</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% empty %}
+                  <tr><td colspan="4" class="px-6 py-6 text-center text-slate-500">No audit logs yet.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+          <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <h3 class="font-bold text-lg">Doctor Productivity</h3>
+            <span class="text-xs font-bold px-2 py-1 bg-primary/20 text-slate-900 rounded">Top Performers</span>
+          </div>
+          <div class="p-6 space-y-5">
+            {% for doctor in top_doctors %}
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="font-bold text-sm">Dr. {{ doctor.reviewed_by__first_name }} {{ doctor.reviewed_by__last_name }}</p>
+                  <p class="text-xs text-slate-500">{{ doctor.reviewed_by__username }}</p>
+                </div>
+                <div class="text-right">
+                  <p class="font-bold text-sm text-primary">{{ doctor.total }} Reviews</p>
+                  <p class="text-xs text-slate-500">Completed</p>
+                </div>
+              </div>
+            {% empty %}
+              <p class="text-sm text-slate-500">No completed reviews available.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</body>
+</html>

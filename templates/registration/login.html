@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df280",
+                        "background-light": "#f5f8f7",
+                        "background-dark": "#102219",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Login | CuraMind AI</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-primary/10 px-6 py-4 md:px-20 lg:px-40 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+<a href="{% url 'landing_page' %}" class="flex items-center gap-3">
+<div class="size-8 text-primary">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 6H42L36 24L42 42H6L12 24L6 6Z"></path>
+</svg>
+</div>
+<h2 class="text-slate-900 text-xl font-bold leading-tight tracking-tight">CuraMind AI</h2>
+</a>
+<div class="flex items-center gap-4">
+<span class="hidden md:inline text-sm text-slate-500">Need help?</span>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary text-slate-900 text-sm font-bold transition-all hover:bg-primary/90" type="button">
+                    Support
+                </button>
+</div>
+</header>
+<main class="flex-1 flex items-center justify-center p-4 md:p-8">
+<div class="max-w-[1000px] w-full grid grid-cols-1 lg:grid-cols-2 bg-white rounded-xl shadow-2xl overflow-hidden border border-primary/5">
+<div class="hidden lg:block relative min-h-[600px] bg-slate-900">
+<div class="absolute inset-0 bg-cover bg-center opacity-60" data-alt="Modern medical diagnostic laboratory with AI interface" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDcSr0nBa0l1D8ERmfcE9ZDYWV2Tzd2C6q-ww6QZ_5-AaYnKJQHvNKNdwBBCe0bxXvvYpZR2yhfen33rc5IALSszHy22NKd2wtB8ofMH3Hn3c6QjSoUt7UTTYFaXbtTG19pIvFdBfh3LekVJSooB9qbzsj4dGr8SM7sLCcWGSEvIGi2HRNpmR3Vm2vKTsvZHBWlXwK_kfqK5QlEI2dRiL3iCiDvtqA2F0jHRnHhuxQvFhmTdFUXzIhjUKCIlDqdn-coVS4zItW01g");'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/40 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-12 space-y-4">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-xs font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+                            HIPAA Compliant
+                        </div>
+<h1 class="text-4xl font-bold text-white leading-tight">Advanced AI for Precision Diagnostics</h1>
+<p class="text-slate-300 text-lg">Securely access your clinical decision support portal and patient analytics dashboard.</p>
+<div class="pt-8 flex gap-6 border-t border-white/10">
+<div class="flex flex-col">
+<span class="text-primary font-bold text-xl">256-bit</span>
+<span class="text-slate-400 text-xs uppercase font-semibold">Encryption</span>
+</div>
+<div class="flex flex-col">
+<span class="text-primary font-bold text-xl">SOC2</span>
+<span class="text-slate-400 text-xs uppercase font-semibold">Certified</span>
+</div>
+<div class="flex flex-col">
+<span class="text-primary font-bold text-xl">MFA</span>
+<span class="text-slate-400 text-xs uppercase font-semibold">Security</span>
+</div>
+</div>
+</div>
+</div>
+<div class="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+<div class="mb-10">
+<h3 class="text-3xl font-bold text-slate-900 mb-2">Welcome Back</h3>
+<p class="text-slate-500">Enter your credentials to access the secure portal.</p>
+</div>
+{% if form.errors %}
+<div class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    Invalid username or password. Please try again.
+</div>
+{% endif %}
+<form class="space-y-6" method="post">
+{% csrf_token %}
+{% if next %}
+<input type="hidden" name="next" value="{{ next }}" />
+{% endif %}
+<div class="space-y-2">
+<label class="text-sm font-semibold text-slate-700 ml-1" for="id_username">Username</label>
+<input class="w-full px-4 py-4 rounded-xl border border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-slate-900" id="id_username" name="username" placeholder="dr.smith" required type="text" />
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center px-1">
+<label class="text-sm font-semibold text-slate-700" for="id_password">Password</label>
+<a class="text-xs font-bold text-primary hover:underline" href="{% url 'password_reset' %}">Forgot password?</a>
+</div>
+<input class="w-full px-4 py-4 rounded-xl border border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-slate-900" id="id_password" name="password" placeholder="••••••••" required type="password"/>
+</div>
+<button class="w-full py-4 bg-primary text-slate-900 font-bold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all active:scale-[0.98]" type="submit">
+                            Sign In to Portal
+                        </button>
+</form>
+<div class="mt-10 pt-8 border-t border-slate-100 text-center">
+<p class="text-slate-500">Don't have an account yet?
+                            <a class="text-primary font-bold hover:underline" href="{% url 'register' %}">Request Access</a>
+</p>
+</div>
+<div class="mt-8 flex flex-wrap justify-center gap-4 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">security</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Enterprise Secure</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="p-8 text-center text-slate-400 text-sm">
+<p>© 2024 CuraMind AI Health Systems. All rights reserved. Professional use only.</p>
+</footer>
+</div>
+</body></html>

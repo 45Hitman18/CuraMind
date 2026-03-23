@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Medical Records - CuraMind AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df280",
+                        "background-light": "#f5f8f7",
+                        "background-dark": "#102219",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .active-nav { background-color: rgba(13, 242, 128, 0.1); border-right: 4px solid #0df280; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="p-6">
+<a href="{% url 'landing_page' %}" class="flex items-center gap-3">
+<div class="bg-primary rounded-lg p-1.5">
+<span class="material-symbols-outlined text-slate-900 text-2xl">neurology</span>
+</div>
+<div>
+<h1 class="text-slate-900 dark:text-white text-lg font-bold leading-none">CuraMind AI</h1>
+<p class="text-xs text-slate-500 font-medium mt-1">Patient Portal</p>
+</div>
+</a>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_dashboard' %}">
+<span class="material-symbols-outlined">dashboard</span>
+                    Home/Dashboard
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg active-nav text-slate-900 dark:text-white font-medium" href="{% url 'patient_medical_records' %}">
+<span class="material-symbols-outlined">description</span>
+                    My Medical Records
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_appointments' %}">
+<span class="material-symbols-outlined">calendar_today</span>
+                    Appointments
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_schedule_appointment' %}">
+<span class="material-symbols-outlined">event_available</span>
+                    Schedule Appointment
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_messages' %}">
+<span class="material-symbols-outlined">chat_bubble</span>
+                    Messages
+                    <span class="ml-auto bg-primary/20 text-slate-800 dark:text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">{{ unread_messages_count }}</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_profile' %}">
+<span class="material-symbols-outlined">person</span>
+                    Profile
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" href="{% url 'patient_feedback' %}">
+<span class="material-symbols-outlined">star</span>
+                    Feedback & Rating
+                </a>
+<form method="post" action="{% url 'logout' %}">
+{% csrf_token %}
+<button class="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors" type="submit">
+<span class="material-symbols-outlined">logout</span>
+                    Logout
+                </button>
+</form>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<a href="{% url 'upload_scan' %}" class="w-full bg-primary hover:bg-primary/90 text-slate-900 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined">cloud_upload</span>
+                    Upload New Scan
+                </a>
+<div class="mt-4 flex items-center gap-2 justify-center py-2 px-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined text-sm text-primary">verified_user</span>
+<span class="text-[10px] uppercase tracking-wider font-bold text-slate-500">HIPAA Compliant</span>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col overflow-y-auto">
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-10">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-transparent focus:border-primary focus:ring-0 rounded-lg text-sm transition-all" placeholder="Search by scan, doctor, or facility..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg relative" type="button">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+<div class="h-8 w-px bg-slate-200 dark:border-slate-800 mx-2"></div>
+<div class="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-tighter">
+<div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+                            HIPAA Compliant
+                        </div>
+</div>
+</div>
+</header>
+<div class="p-8">
+<div class="flex flex-col lg:flex-row gap-8 items-start">
+<div class="flex-1 min-w-0">
+<div class="flex items-end justify-between mb-8">
+<div>
+<h2 class="text-3xl font-black tracking-tight mb-2">My Medical Records</h2>
+<p class="text-slate-500">Access and manage your diagnostic history and AI-driven analysis.</p>
+</div>
+<div class="flex gap-2">
+<a href="{% url 'upload_scan' %}" class="flex items-center gap-2 px-4 py-2 bg-primary text-background-dark font-bold text-sm rounded-lg hover:brightness-110 transition-all">
+<span class="material-symbols-outlined">upload_file</span>
+                                    Upload New Scan
+                                </a>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-3 mb-6">
+<button class="px-4 py-2 rounded-full bg-slate-900 text-white text-sm font-medium" type="button">All Scans</button>
+<button class="px-4 py-2 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium hover:border-primary" type="button">MRI</button>
+<button class="px-4 py-2 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium hover:border-primary" type="button">X-Ray</button>
+<button class="px-4 py-2 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium hover:border-primary" type="button">CT Scan</button>
+<button class="px-4 py-2 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium hover:border-primary" type="button">Ultrasound</button>
+<div class="flex-1"></div>
+<button class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400" type="button">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+                                Sort by: Date
+                            </button>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Scan Details</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Doctor / Facility</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">AI Analysis</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+{% for record in medical_records %}
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">radiology</span>
+</div>
+<div>
+<p class="text-sm font-bold">{{ record.scan_type }}</p>
+<p class="text-xs text-slate-500">{{ record.created_at|date:"M d, Y • h:i A" }}</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm font-medium">
+{% if record.reviewed_by %}
+Dr. {{ record.reviewed_by.get_full_name|default:record.reviewed_by.username }}
+{% else %}
+Awaiting Doctor Review
+{% endif %}
+</p>
+<p class="text-xs text-slate-500">CuraMind Diagnostics</p>
+</td>
+<td class="px-6 py-5">
+{% if record.ai_status == 'high' or record.ai_status == 'medium' %}
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">warning</span>
+                                                Anomaly Detected
+                                            </div>
+{% elif record.ai_status == 'processing' or record.ai_status == 'uploaded' %}
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">schedule</span>
+                                                Processing AI
+                                            </div>
+{% else %}
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+                                                Normal
+                                            </div>
+{% endif %}
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2">
+<a href="{% url 'medical_record_file' record.id %}" target="_blank" rel="noopener" class="px-3 py-1.5 text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-primary hover:text-background-dark rounded transition-colors">View Report</a>
+<a href="{% url 'medical_record_file' record.id %}" download class="p-1.5 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">download</span>
+</a>
+</div>
+</td>
+</tr>
+{% empty %}
+<tr>
+<td colspan="4" class="px-6 py-10 text-center text-slate-500">No medical records uploaded yet.</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+<div class="w-full lg:w-80 flex flex-col gap-6" id="appointments">
+<div class="bg-primary/5 dark:bg-primary/10 border border-primary/20 rounded-xl p-6">
+<h3 class="text-sm font-bold uppercase tracking-widest text-primary mb-4">Quick Summary</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-sm text-slate-600 dark:text-slate-400">Total Records</span>
+<span class="text-lg font-black">{{ total_records }}</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-sm text-slate-600 dark:text-slate-400">Recent Scans (30d)</span>
+<span class="text-lg font-black">{{ recent_scans_30d }}</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-sm text-slate-600 dark:text-slate-400">AI Anomalies</span>
+<span class="text-lg font-black text-amber-500">{{ ai_anomalies_count }}</span>
+</div>
+<div class="pt-4 border-t border-primary/10">
+<div class="flex items-center gap-2 text-xs text-primary font-bold">
+<span class="material-symbols-outlined text-sm">shield</span>
+                                        Data Encrypted &amp; Secure
+                                    </div>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-500 mb-4">Upcoming</h3>
+<div class="space-y-4">
+{% for appointment in upcoming_appointments %}
+<div class="flex gap-4{% if forloop.counter > 1 %} opacity-60{% endif %}">
+<div class="flex flex-col items-center justify-center w-12 h-14 bg-slate-100 dark:bg-slate-800 rounded-lg">
+<span class="text-[10px] font-bold uppercase text-slate-500 leading-none mb-1">{{ appointment.datetime|date:"M" }}</span>
+<span class="text-lg font-black leading-none">{{ appointment.datetime|date:"d" }}</span>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="text-sm font-bold truncate">Appointment</p>
+<p class="text-xs text-slate-500">Dr. {{ appointment.doctor.get_full_name|default:appointment.doctor.username }}</p>
+</div>
+</div>
+{% empty %}
+<p class="text-sm text-slate-500">No upcoming appointments scheduled.</p>
+{% endfor %}
+</div>
+<a href="{% url 'patient_schedule_appointment' %}" class="w-full mt-6 py-2 text-sm font-bold text-primary hover:underline transition-all text-center block">
+                                Schedule New
+                            </a>
+</div>
+<div id="messages" class="flex flex-col items-center justify-center p-4 gap-4 opacity-50">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">verified</span>
+</div>
+<div class="w-12 h-12 flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">lock</span>
+</div>
+<div class="w-12 h-12 flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">encrypted</span>
+</div>
+</div>
+<p class="text-[10px] text-center font-bold uppercase tracking-widest">Enterprise Grade Security • 256-bit Encryption • HIPAA Compliant</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
