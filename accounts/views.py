@@ -28,3 +28,8 @@ def register(request):
 		form = RegistrationForm()
 
 	return render(request, "registration/register.html", {"form": form})
+
+def mark_notifications_read(request):
+	if request.user.is_authenticated:
+		request.user.notifications.filter(is_read=False).update(is_read=True)
+	return redirect(request.META.get('HTTP_REFERER', 'landing_page'))

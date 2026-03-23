@@ -123,7 +123,39 @@
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
 <input class="pl-9 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm w-64 focus:ring-1 focus:ring-primary" placeholder="Search analytics..." type="text"/>
 </div>
-<button class="p-2 text-slate-500 hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<div class="relative group" style="position: relative;">
+    <button class="p-2 relative text-slate-500 hover:text-primary transition-colors" type="button" onclick="const p = this.nextElementSibling; if(p.style.display=='block'){p.style.display='none';}else{p.style.display='block';}">
+        <span class="material-symbols-outlined">notifications</span>
+        {% if unread_notifications_count > 0 %}
+        <span class="absolute top-2 right-2 flex size-2.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full size-2.5 bg-rose-500"></span>
+        </span>
+        {% endif %}
+    </button>
+    <div style="display: none;" class="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl z-50 overflow-hidden">
+        <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 dark:text-white">Notifications</h3>
+            {% if unread_notifications_count > 0 %}
+            <a href="{% url 'mark_notifications_read' %}" class="text-xs text-primary font-bold hover:underline">Mark all read</a>
+            {% endif %}
+        </div>
+        <div class="max-h-96 overflow-y-auto">
+            {% for n in navbar_notifications %}
+            <div class="p-4 border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors {% if not n.is_read %}bg-primary/5{% endif %}">
+                <p class="text-sm font-bold text-slate-900 dark:text-white">{{ n.title }}</p>
+                <p class="text-xs text-slate-500 mt-1 line-clamp-2">{{ n.message }}</p>
+                <p class="text-[10px] text-slate-400 font-medium mt-2">{{ n.created_at|timesince }} ago</p>
+            </div>
+            {% empty %}
+            <div class="p-8 text-center text-slate-500 text-sm">
+                <span class="material-symbols-outlined text-4xl mb-2 opacity-50">notifications_paused</span>
+                <p>No new notifications</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 <div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700 border border-primary/20 flex items-center justify-center">
 <span class="material-symbols-outlined text-sm">person</span>
 </div>
