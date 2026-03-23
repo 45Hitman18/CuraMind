@@ -131,10 +131,10 @@
 </div>
 
 <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
-<form method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+<form method="get" class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
 <div>
 <label class="block text-sm font-bold mb-2" for="doctor">Select Doctor</label>
-<select id="doctor" name="doctor" class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary">
+<select id="doctor" name="doctor" onchange="this.form.submit()" class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary">
 <option value="">Choose doctor</option>
 {% for item in available_doctors %}
 <option value="{{ item.user.id }}" {% if selected_doctor and selected_doctor.id == item.user.id %}selected{% endif %}>Dr. {{ item.user.get_full_name|default:item.user.username }}</option>
@@ -143,11 +143,13 @@
 </div>
 <div>
 <label class="block text-sm font-bold mb-2" for="date">Appointment Date</label>
-<input id="date" name="date" type="date" value="{{ selected_date }}" min="{% now 'Y-m-d' %}" class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary"/>
+<input id="date" name="date" type="date" value="{{ selected_date }}" min="{% now 'Y-m-d' %}" onchange="this.form.submit()" class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary"/>
 </div>
-<div>
+<noscript>
+<div class="md:col-span-2">
 <button class="w-full bg-primary hover:bg-primary/90 text-slate-900 font-bold py-3 px-4 rounded-xl transition-all" type="submit">Check Live Availability</button>
 </div>
+</noscript>
 </form>
 </div>
 
