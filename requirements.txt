@@ -1,4 +1,10 @@
-Django>=6.0,<7.0
+Django>=5.1,<6.0
 google-generativeai
 pillow
 python-dotenv
+gunicorn
+whitenoise
+psycopg2-binary
+dj-database-url
+cloudinary
+django-cloudinary-storage
